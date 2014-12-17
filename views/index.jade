@@ -1,5 +1,10 @@
 extends layout
-
+block vars
+ - var title = "Adda-Home"
 block content
-  h1= title
-  p Welcome to #{title}
+ center
+  h1 Welcome to Adda
+  p For further access 
+   a(href="/login") Login
+  p Or if new user 
+   a(href="/registration") Register

@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "initDB": "node scripts/initialize_db.js data/school.db",
-    "test": "mocha tests/*Test.js && mocha --ui tdd tests/unit/*Test.js"
+    "test": "mocha test/*test.js"
   },
   "dependencies": {
     "express": "~4.9.0",
@@ -18,9 +17,8 @@
     "jade": "~1.6.0",
     "passport": "~0.2.1",
     "passport-local": "~1.0.0",
-    "express-session": "~1.9.3",
-    "crypto-js": "~3.1.2-5",
-    "connect-flash": "~0.1.1"
+    "express-session": "~1.9.3"
+
   },
   "devDependencies":{
     "chai": "1.10.0"

@@ -14,7 +14,7 @@ var runAllQuery = function () {
 	};
 
 	[
-		"create table if not exists information(name text, email_id text primary key, password text, username text, birthday text, gender text);"
+		"create table if not exists registration(id integer primary key autoincrement,name text not null, email_id text unique not null, password text not null);"
 	].forEach(runQuery);
 };
 
