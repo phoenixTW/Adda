@@ -1,0 +1,2 @@
+insert into information (name, email_id, password, username, birthday, gender) values('Kaustav Chakraborty', 'kaustav.ron@gmail.com', '12345', 'kaustavRon', 24011994, 'male');
+insert into information (name, email_id, password, username, birthday, gender) values('Prasenjit Chakraborty', 'prasenjitc@gmail.com', '54321', 'prasen', 01121993, 'male');
