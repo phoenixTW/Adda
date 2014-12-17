@@ -30,4 +30,16 @@ describe('adda_records',function(){
 			});
 		});
 	});
+
+		describe('#getPassword',function(){
+		it('should give 12345 for kaustav.ron@gmail.com',function(done){
+			var email_id = "kaustav.ron@gmail.com";
+			var expected_password = "12345";
+			adda_records.getPassword(email_id, function(err,password){
+				assert.notOk(err);
+				assert.deepEqual(password.password, expected_password);
+				done();
+			});
+		});
+	});
 });

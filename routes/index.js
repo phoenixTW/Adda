@@ -19,6 +19,17 @@ router.get('/login',function(req,res){
 	res.render('login');
 });
 
+router.post('/login',function(req,res){
+	var userInfo = req.body;
+	var callback = function(error,password){
+		error || (password.password!==userInfo.password) &&
+		 	res.render('login', {error:"Invalid Username or Password.."});
+		!error && (password.password===userInfo.password) &&
+			res.redirect('dashboard');	
+	};
+	lib.getPassword(userInfo.email_id,callback);
+});
+
 router.post('/registration',function(req,res){
 	var userInfo = req.body;
 	var callback = function(error){
