@@ -97,7 +97,11 @@ var _postComment = function (post, db, onComplete) {
 
 var _getTopicInfo = function(db,onComplete){
 	select(db, onComplete, 'topics', 'all');
-}
+};
+
+var _getTopics = function(userId,db,onComplete){
+	select(db,onComplete,"topics",'all',["name"],{userId:userId});
+};
 
 var init = function(location){	
 	var operate = function(operation){
@@ -126,6 +130,7 @@ var init = function(location){
 		searchTopics:operate(_searchTopics),
 		postComment: operate(_postComment),
 		getComments: operate(_getComments),
+		getTopics:operate(_getTopics),
 		getAllTopics:operate(_getAllTopics)
 	};
 	return records;

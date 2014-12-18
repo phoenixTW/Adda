@@ -41,9 +41,9 @@ describe('adda_records',function(){
 			};
 
 			var expectedComment = [
-				{ 	topic_id: 1,
+				{ 	topic_id: "1",
 					comment: 'nice game',
-					userId: 1,
+					userId: "1",
 					time: '02/03/2014'
 				}
 			];
@@ -152,10 +152,10 @@ describe('adda_records',function(){
 	});
 	describe('#getAllTopics',function(){
 		it('should give all topics',function(done){
-			var expected_topics = [{id:1,name:'step'},{id:2,name:'step of success'},{id:3,name:'soda'}]
+			var expected_topics = [{id:1,name:'step'},{id:2,name:'step of success'},{id:3,name:'soda'},{id:4,name:'hocky'}]
 			adda_records.getAllTopics(function(err,topics){
 				assert.notOk(err);
-				assert.deepEqual(expected_topics, topics);
+				assert.deepEqual(expected_topics,topics);
 				done();
 			});
 		});
