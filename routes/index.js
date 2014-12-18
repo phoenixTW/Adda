@@ -34,6 +34,36 @@ router.get('/', function(req, res) {
   res.render('index');
 });
 
+router.get('/addtopics', function(req, res) {
+  res.render('addtopics');
+});
+
+router.post('/addtopics',function(req,res){
+	var userInfo = req.body;
+	userInfo.userId = req.session.user_id; 
+	userInfo.start_time = new Date();
+	console.log(userInfo);
+	var callback = function(error){
+		error && res.render('addtopics', {error:error});
+		!error && res.redirect('topic/'+req.session.user_id);	
+	}
+	lib.addTopic(userInfo,callback);
+});
+
+router.post('/searchTopics', function(req, res) {
+	var data = req.body;
+	var callback = function(error,topics){
+		(topics.length==0 || error) && res.render('addtopics',{error1:"Topic not found.."});
+		(!error && topics.length>0) && res.render('addtopics',{name:topics});
+	};
+	if(data.searchText == ''){
+		lib.getAllTopics(callback);
+	}
+	else
+		lib.searchTopics(data.searchText,callback);
+});
+
+
 router.get('/registration',function(req,res){
 	res.render('registration');
 });
@@ -77,25 +107,6 @@ router.post('/registration',function(req,res){
 		!error && res.redirect('dashboard');
 	};
 	lib.insertUsers(userInfo,callback);
-});
-
-router.get('/addtopics',function(req,res){
-	res.render('addtopics');
-});
-
-router.post('/addtopics',function(req,res){
-	var userInfo = req.body;
-	userInfo.userId = req.session.user_id; 
-	userInfo.start_time = new Date();
-	var callback = function(error){
-		error && res.render('addtopics', {error:error});
-		!error && res.redirect('topic/'+req.session.user_id);	
-	}
-	lib.addTopic(userInfo,callback);
-});
-
-router.get('/topic', function (req, res) {
-	res.render('topic');
 });
 
 router.get('/topic/:id', function (req, res) {
