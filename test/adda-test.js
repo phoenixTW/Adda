@@ -112,6 +112,16 @@ describe('adda_records',function(){
 		});
 
 	});
-
+	});
+	describe('#searchTopics',function(){
+		it('should give all topics started with step',function(done){
+			var expected_topics = [{name:'step'},{name:'step of success'}]
+			adda_records.searchTopics('ste', function(err,topics){
+				console.log("aaaaaaaaaaaaaaaaa",topics)
+				assert.notOk(err);
+				assert.deepEqual(expected_topics, topics);
+				done();
+			});
+		});
 	});
 });

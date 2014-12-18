@@ -67,6 +67,15 @@ var _getSingleUser = function(email_id,db,onComplete){
 	var whereToGet = {email_id: email_id};
 	select(db, onComplete, 'registration', 'get', null, whereToGet);
 };
+var _searchTopics = function(startChars,db,onComplete){console.log(startChars,db);
+	var searchTopicsQry = "select name from topics where name like '%"+startChars+"%'";
+	try{
+		db.all(searchTopicsQry,onComplete);
+	}
+	catch(err){
+		throw new err;
+	}
+}
 
 var _getComments = function (topicId, db, onComplete) {
 	var whereToGet = {topic_id: topicId};
@@ -101,6 +110,7 @@ var init = function(location){
 		getUserInfo:operate(_getUserInfo),
 		getPassword:operate(_getPassword),
 		getSingleUser:operate(_getSingleUser),
+		searchTopics:operate(_searchTopics),
 		postComment: operate(_postComment),
 		getComments: operate(_getComments)
 	};
