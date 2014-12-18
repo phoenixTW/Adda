@@ -29,7 +29,6 @@ var requireLogin = function(req,res,next){
 };
 
 router.use(loadUserFromSession);
-/////////////////////////////////////////////////////////////
 
 router.get('/', function(req, res) {
   res.render('index');
@@ -77,5 +76,14 @@ router.post('/registration',function(req,res){
 	};
 	lib.insertUsers(userInfo,callback);
 });
+
+router.get('/topics',function(req,res){
+	res.render('topics');
+});
+
+router.post('/topics',function(req,res){
+	console.log(req.body);
+});
+
 
 module.exports = router;
