@@ -35,15 +35,15 @@ describe('adda_records',function(){
 		it('insert "nice game" by Kaustav Chakraborty into comments table',function(done){
 			var post = {
 				comment: 'nice game',
-				userId: '1',
-				topicId: '1',
+				userId: 1,
+				topicId: 1,
 				time: '02/03/2014'
 			};
 
 			var expectedComment = [
-				{ 	topic_id: '1',
+				{ 	topic_id: 1,
 					comment: 'nice game',
-					userId: '1',
+					userId: 1,
 					time: '02/03/2014'
 				}
 			];
@@ -126,6 +126,8 @@ describe('adda_records',function(){
 				assert.notOk(error);
 				topic.id = 4;
 				topic.end_time = null;
+				console.log(">>>>>>>>>>>>>>>",topicInfo[3]);
+				console.log(">>>>>>>>>>>>>>><<<<<<<<<<<<",topic);
 				assert.deepEqual(topicInfo[3],topic);
 				done();
 			};

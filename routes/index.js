@@ -34,16 +34,16 @@ router.get('/', function(req, res) {
   res.render('index');
 });
 
-router.get('/addaTopic', function(req, res) {
-  res.render('addaTopic');
+router.get('/addTopics', function(req, res) {
+  res.render('addTopics');
 });
 
-router.post('/addaTopic', function(req, res) {
+router.post('/addTopics', function(req, res) {
 	var data = req.body;
 	var callback = function(error,topics){
 		console.log(topics);
-		(topics.length==0 || error) && res.render('addaTopic',{error:"Topic not found.."});
-		(!error && topics.length>0) && res.render('addaTopic',{name:topics});
+		(topics.length==0 || error) && res.render('addTopics',{error:"Topic not found.."});
+		(!error && topics.length>0) && res.render('addTopics',{name:topics});
 	};
 	if(data.searchText == ''){
 		lib.getAllTopics(callback);
@@ -67,16 +67,15 @@ router.get('/login',function(req,res){
 
 router.post('/login',function(req,res){
 	var userInfo = req.body;
-	var callback = function(error,data){
-		if(((data===undefined) || error || 
-			(!bcrypt.compareSync(userInfo.password,data.password)))){
+	var callback = function(error,password){
+		if(((password===undefined) || error || 
+			(!bcrypt.compareSync(userInfo.password,password.password)))){
 		 	res.render('login', {error:"Invalid Username or Password.."});
 		}
-		if(!error && (data!==undefined) && 
-			bcrypt.compareSync(userInfo.password,data.password)){
+		if(!error && (password!==undefined) && 
+			bcrypt.compareSync(userInfo.password,password.password)){
 			req.session.userEmail = userInfo.email_id;
-			req.session.user_id = data.id;
-			// req.session.userId = password.id;
+			req.session.userId = password.id;
   			res.redirect('/dashboard');
 		}
 	};
@@ -97,25 +96,6 @@ router.post('/registration',function(req,res){
 		!error && res.redirect('dashboard');
 	};
 	lib.insertUsers(userInfo,callback);
-});
-
-router.get('/addtopics',function(req,res){
-	res.render('addtopics');
-});
-
-router.post('/addtopics',function(req,res){
-	var userInfo = req.body;
-	userInfo.userId = req.session.user_id; 
-	userInfo.start_time = new Date();
-	var callback = function(error){
-		error && res.render('addtopics', {error:error});
-		!error && res.redirect('addtopics');	
-	}
-	lib.addTopic(userInfo,callback);
-});
-
-router.get('/topic', function (req, res) {
-	res.render('topic');
 });
 
 router.get('/topic/:id', function (req, res) {
