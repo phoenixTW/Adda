@@ -52,14 +52,13 @@ router.post('/login',function(req,res){
 		if(((data===undefined) || error || 
 			(!bcrypt.compareSync(userInfo.password,data.password)))){
 		 	res.render('login', {error:"Invalid Username or Password.."});
-		}
+		};
 		if(!error && (data!==undefined) && 
 			bcrypt.compareSync(userInfo.password,data.password)){
 			req.session.userEmail = userInfo.email_id;
 			req.session.user_id = data.id;
-			// req.session.userId = password.id;
   			res.redirect('/dashboard');
-		}
+		};
 	};
 
 	lib.getPassword(userInfo.email_id,callback);
