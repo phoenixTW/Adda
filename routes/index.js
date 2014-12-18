@@ -29,7 +29,6 @@ var requireLogin = function(req,res,next){
 };
 
 router.use(loadUserFromSession);
-/////////////////////////////////////////////////////////////
 
 router.get('/', function(req, res) {
   res.render('index');
@@ -76,6 +75,7 @@ router.post('/login',function(req,res){
 		if(!error && (password!==undefined) && 
 			bcrypt.compareSync(userInfo.password,password.password)){
 			req.session.userEmail = userInfo.email_id;
+			req.session.userId = password.id;
   			res.redirect('/dashboard');
 		}
 	};
@@ -98,8 +98,29 @@ router.post('/registration',function(req,res){
 	lib.insertUsers(userInfo,callback);
 });
 
-router.get('/topic', function (req, res) {
-	res.render('topic');
+router.get('/topic/:id', function (req, res) {
+	res.render('topic', {id: req.params.id});
+});
+
+router.post('/postComment/:id', function (req, res) {
+	var post = {
+		comment: req.body.comment,
+		userId: req.session.userId,
+		time: new Date(),
+		topicId: req.params.id
+	};
+
+	var onComplete = function (error, posts) {
+		error && next();
+		if(posts) {
+			res.render('topic', {id: req.params.id, comments: posts});
+		}
+	};
+
+	var callback = function (err) {
+		lib.getComments(post.topicId, onComplete);
+	}
+	lib.postComment(post, callback);
 });
 
 module.exports = router;
