@@ -67,7 +67,7 @@ var _getSingleUser = function(email_id,db,onComplete){
 	var whereToGet = {email_id: email_id};
 	select(db, onComplete, 'registration', 'get', null, whereToGet);
 };
-var _searchTopics = function(startChars,db,onComplete){
+var _searchTopics = function(startChars,db,onComplete){console.log(startChars);
 	var searchTopicsQry = "select name from topics where name like '%"+startChars+"%'";
 	db.all(searchTopicsQry,onComplete);
 }

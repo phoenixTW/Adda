@@ -42,7 +42,7 @@ router.post('/addaTopic', function(req, res) {
 	var data = req.body;
 	var callback = function(error,topics){
 		console.log(topics);
-		(error || topics == []) && res.render('addaTopic',{error:"Topic not found.."});
+		(topics.length==0 || error) && res.render('addaTopic',{error:"Topic not found.."});
 		(!error && topics.length>0) && res.render('addaTopic',{name:topics});
 	};
 	if(data.searchText == ''){
