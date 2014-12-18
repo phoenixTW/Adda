@@ -31,6 +31,37 @@ describe('adda_records',function(){
 		});
 	});
 
+	describe('#postComment',function(){
+		it('insert "nice game" by Kaustav Chakraborty into comments table',function(done){
+			var post = {
+				comment: 'nice game',
+				userId: '1',
+				topicId: '1',
+				time: '02/03/2014'
+			};
+
+			var expectedComment = [
+				{ 	topic_id: 1,
+					comment: 'nice game',
+					userId: 1,
+					time: '02/03/2014'
+				}
+			];
+
+			var retriveComments = function(err, comments) {
+				assert.notOk(err);
+				assert.deepEqual(comments, expectedComment);
+				done();
+			};
+
+			var callback = function(error){
+				assert.notOk(error);
+				adda_records.getComments('1', retriveComments);
+			};
+			adda_records.postComment(post, callback)
+		});
+	});
+
 		describe('#getPassword',function(){
 		it('should give 12345 for kaustav.ron@gmail.com',function(done){
 			var email_id = "kaustav.ron@gmail.com";

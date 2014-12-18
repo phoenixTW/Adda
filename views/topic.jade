@@ -3,5 +3,23 @@ block vars
  - var title = "Adda-Topic"
 block content
  h1 WELCOME TO TOPIC
+ p 
+  a(href="/dashboard") dashboard
+  |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  a(href="/logout") logout
  div
+  h3
+   span
+    | name: started- by &nbsp;&nbsp;&nbsp;
+    | start-time &nbsp;&nbsp;&nbsp;
+    | close-time
+   h4 description:
   input(type = "submit" id = "action" value = "join")
+  div(class = "commentHolder")
+   div(id = "comment" class = "comment")
+    input(type = "submit" id = "load" class = "load-button" value = "load complete")
+   form(id = "enterComment" class = "enterComment" action = "/postComment" method = "POST")
+    span
+     input(type = "text" class = "inputBox" placeholder = "My current comment............")
+     input(type = "submit" id = "post" class = "post" value = "submit")
+  

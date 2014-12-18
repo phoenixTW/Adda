@@ -64,10 +64,19 @@ exports.queryHandler = {
 };
 
 var _getSingleUser = function(email_id,db,onComplete){
-	// var getUsrQry = "select * from registration where email_id = '" +
-	// 	email_id+"';";
 	var whereToGet = {email_id: email_id};
 	select(db, onComplete, 'registration', 'get', null, whereToGet);
+};
+
+var _getComments = function (topicId, db, onComplete) {
+	var whereToGet = {topic_id: topicId};
+	select(db, onComplete, 'comments', 'all', null, whereToGet);
+};
+
+var _postComment = function (data, db, onComplete) {
+	var fields = ['topic_id', 'comment', 'userId', 'time'];
+	var whatToSend = [data.topicId, data.comment, data.userId, data.time];
+	insertInto(db, fields, whatToSend, 'comments', onComplete);
 };
 
 var init = function(location){	
@@ -91,7 +100,9 @@ var init = function(location){
 		insertUsers:operate(_insertUsers),
 		getUserInfo:operate(_getUserInfo),
 		getPassword:operate(_getPassword),
-		getSingleUser:operate(_getSingleUser)
+		getSingleUser:operate(_getSingleUser),
+		postComment: operate(_postComment),
+		getComments: operate(_getComments)
 	};
 	return records;
 };

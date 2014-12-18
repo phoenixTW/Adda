@@ -6,3 +6,29 @@ body {
 a {
   color: #00B7FF;
 }
+
+.comment {
+	height: 200px;
+	width: 800px;
+	margin: 10%;
+	border: 1px black solid;
+}
+
+.load-button {
+	height: 20%;
+	width: 100%;
+}
+
+.commentHolder {
+	height: 300px;
+	width: 900px;
+}
+
+.enterComment {
+	margin-left: 20%;
+}
+
+.inputBox {
+	height: 30px;
+	width: 300px;
+}
