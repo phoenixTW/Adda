@@ -1,21 +1,85 @@
 var sqlite3 = require("sqlite3").verbose();
 
-var _insertUsers = function(userData,db,onComplete){
-	var insertUsersQuery = 'insert into registration (name, email_id, password) values("'+
-		userData.name+'", "'+userData.email_id+'", "'+userData.password+'");';
-	db.run(insertUsersQuery,onComplete);
+// var _insertUsers = function(userData,db,onComplete){
+// 	var insertUsersQuery = 'insert into registration (name, email_id, password) values("'+
+// 		userData.name+'", "'+userData.email_id+'", "'+userData.password+'");';
+// 	db.run(insertUsersQuery,onComplete);
+// };
+
+// var _getUserInfo = function(db,onComplete){
+// 	var getUserInfoQry = "select * from registration";
+// 	db.all(getUserInfoQry,onComplete);
+// };
+
+// var _getPassword = function(email_id,db,onComplete){
+// 	var getPwdQry = "select password from registration where email_id = '" +
+// 		email_id+"';";
+// 	db.get(getPwdQry,onComplete);
+// };
+
+var insertQueryMaker = function (tableName, data, fields) {
+	var columns = fields && ' (' + fields.join(', ') + ')' || '';
+	var values = '"' + data.join('", "') + '"';
+	var query = 'insert into ' + tableName + columns + ' values(' + values + ');';
+	return query;
+};
+
+var selectQueryMaker = function (tableName, retrivalData, where) {
+	retrivalData = retrivalData || ['*'];
+	var whatToGet = retrivalData.join(', ');
+	var whereToGet = where && retrieveWhereToGet(where) || '';
+
+	var query = 'select ' + whatToGet + ' from ' + tableName + whereToGet + ';';
+	return query;
+};
+
+var insertInto = function (db, fields, data, tableName, onComplete) {
+	var query = insertQueryMaker(tableName, data, fields);
+	db.run(query, onComplete);
+};
+
+
+var select = function (db, onComplete, tableName, retriveMethod, retrivalData, where) {
+	var query = selectQueryMaker(tableName, retrivalData, where);
+	db[retriveMethod](query, onComplete);
 };
 
 var _getUserInfo = function(db,onComplete){
-	var getUserInfoQry = "select * from registration";
-	db.all(getUserInfoQry,onComplete);
+	select(db, onComplete, 'registration', 'all');
 };
 
-var _getPassword = function(email_id,db,onComplete){
-	var getPwdQry = "select password from registration where email_id = '" +
-		email_id+"';";
-	db.get(getPwdQry,onComplete);
+
+var _insertUsers = function (userData, db, onComplete) {
+	var fields = ['name', 'email_id', 'password'];
+	var data = [userData.name, userData.email_id, userData.password];
+
+	insertInto(db, fields, data, 'registration', onComplete);
 };
+
+var retrieveWhereToGet = function (resource) {
+	var whereToGet = Object.keys(resource).map(function (key) {
+		return key + ' = "' + resource[key] + '"';
+	}).join(' and ');
+
+	return ' where ' + whereToGet;
+};
+
+var _getPassword = function (email_id, db, onComplete) {
+	var whereToGet = {email_Id: email_id};
+	select(db, onComplete, 'registration', 'get', ['password'], whereToGet);
+};
+
+exports.queryParser = {
+	selectQueryMaker: selectQueryMaker,
+	insertQueryMaker: insertQueryMaker
+};
+
+
+exports.queryHandler = {
+	select: select,
+	insertInto: insertInto
+};
+
 
 var init = function(location){	
 	var operate = function(operation){

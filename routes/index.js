@@ -22,11 +22,13 @@ router.get('/login',function(req,res){
 router.post('/login',function(req,res){
 	var userInfo = req.body;
 	var callback = function(error,password){
-		error || (password.password!==userInfo.password) &&
+		cosole.log(error);
+		error || (password == undefined) || (password.password!==userInfo.password) &&
 		 	res.render('login', {error:"Invalid Username or Password.."});
 		!error && (password.password===userInfo.password) &&
 			res.redirect('dashboard');	
 	};
+
 	lib.getPassword(userInfo.email_id,callback);
 });
 
@@ -37,6 +39,10 @@ router.post('/registration',function(req,res){
 		!error && res.redirect('dashboard');
 	};
 	lib.insertUsers(userInfo,callback);
+});
+
+router.get('/topic', function (req, res) {
+	res.render('topic');
 });
 
 module.exports = router;
