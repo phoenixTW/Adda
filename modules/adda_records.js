@@ -59,17 +59,6 @@ var _getPassword = function (email_id, db, onComplete) {
 };
 
 
-exports.queryParser = {
-	selectQueryMaker: selectQueryMaker,
-	insertQueryMaker: insertQueryMaker
-};
-
-
-exports.queryHandler = {
-	select: select,
-	insertInto: insertInto
-};
-
 var _getSingleUser = function(email_id,db,onComplete){
 	var whereToGet = {email_id: email_id};
 	select(db, onComplete, 'registration', 'get', null, whereToGet);
@@ -104,6 +93,15 @@ var _getTopicId = function (topicName, db, onComplete) {
 	select(db, onComplete, 'topics', 'get', ['id'], whereToGet);
 };
 
+var _getTopicDetails = function (topicId, db, onComplete) {
+	var whereToGet = {id: topicId};
+	select(db, onComplete, 'topics', 'get', null, whereToGet);
+};
+
+var _getUserName = function (usrId, db, onComplete) {
+	var whereToGet = {id: usrId};
+	select(db, onComplete, 'registration', 'get', ['name'], whereToGet);
+};
 
 var init = function(location){	
 	var operate = function(operation){
@@ -132,8 +130,21 @@ var init = function(location){
 		searchTopics:operate(_searchTopics),
 		postComment: operate(_postComment),
 		getComments: operate(_getComments),
-		getTopicId: operate(_getTopicId)
+		getTopicId: operate(_getTopicId),
+		getTopicDetails: operate(_getTopicDetails),
+		getUserName: operate(_getUserName)
 	};
 	return records;
 };
 exports.init = init;
+
+exports.queryParser = {
+	selectQueryMaker: selectQueryMaker,
+	insertQueryMaker: insertQueryMaker
+};
+
+
+exports.queryHandler = {
+	select: select,
+	insertInto: insertInto
+};

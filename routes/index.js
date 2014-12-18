@@ -105,12 +105,24 @@ router.post('/addtopics',function(req,res){
 
 router.get('/topic/:id', function (req, res) {
 	var id = req.params.id;
+	
 	var onComplete = function (error, posts) {
 		error && next();
 		if(posts) {
-			console.log(posts);
 			posts.id = id;
-			res.render('topic', {posts: posts});
+			var callback = function (err, details) {
+				var getUser = function(err, userName) {
+					var data = {
+						posts: posts,
+						details: details,
+						adminName: userName.name
+					}
+					res.render('topic', data);
+				};
+
+				lib.getUserName(details.userId, getUser);
+			};
+			lib.getTopicDetails(id, callback);
 		}
 	};
 

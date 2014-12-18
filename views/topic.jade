@@ -3,6 +3,7 @@ block vars
  - var title = "Adda-Topic"
 block content
  h1 WELCOME TO TOPIC
+ h2 TOPIC : #{details.name}
  p 
   a(href="/dashboard") dashboard
   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -10,14 +11,15 @@ block content
  div
   h3
    span
-    | name: started- by &nbsp;&nbsp;&nbsp;
-    | start-time &nbsp;&nbsp;&nbsp;
-    | close-time
-   h4 description:
+    | name: #{adminName} &nbsp;&nbsp;&nbsp;
+    | start-time: #{details.start_time} &nbsp;&nbsp;&nbsp;
+    | close-time : #{details.end_time}
+   h4 description: #{details.description}
   input(type = "submit" id = "action" value = "join")
   div(class = "commentHolder")
    div(id = "comment" class = "comment")
     input(type = "submit" id = "load" class = "load-button" value = "load complete")
+    div
     each post in posts
      div 
        p Name : #{post.userId}
