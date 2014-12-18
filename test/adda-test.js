@@ -41,9 +41,9 @@ describe('adda_records',function(){
 			};
 
 			var expectedComment = [
-				{ 	topic_id: 1,
+				{ 	topic_id: '1',
 					comment: 'nice game',
-					userId: 1,
+					userId: '1',
 					time: '02/03/2014'
 				}
 			];
@@ -106,16 +106,41 @@ describe('adda_records',function(){
 			});
 
 			it('should return insert into (field1, field2) tableName values ("value1", "value2") if field is given as select object', function () {
-				var expectedQuery = 'insert into tableName (field1, field2) values("value1", "value2");';
-				assert.deepEqual(lib.queryParser.insertQueryMaker('tableName', ['value1', 'value2'], ['field1', 'field2']), expectedQuery);
+					var expectedQuery = 'insert into tableName (field1, field2) values("value1", "value2");';
+					assert.deepEqual(lib.queryParser.insertQueryMaker('tableName', ['value1', 'value2'], ['field1', 'field2']), expectedQuery);
+				});
 			});
 		});
+	});
 
+	describe('#addTopic',function(){
+		it('insert new topic into topics table along with userId and time',function(done){
+			var topic = {
+				name: 'hocky',
+				description: 'hocky is our national game',
+				userId: 1,
+				start_time:"GMT 15:30",
+			};
+
+			var callback = function(error,topicInfo){
+				assert.notOk(error);
+				topic.id = 4;
+				topic.end_time = null;
+				assert.deepEqual(topicInfo[3],topic);
+				done();
+			};
+
+			adda_records.addTopic(topic, function(err){
+				assert.notOk(err);
+				adda_records.getTopicInfo(callback);
+			});
+		});
 	});
-	});
+
 	describe('#searchTopics',function(){
 		it('should give all topics started with step',function(done){
 			var expected_topics = [{name:'step'},{name:'step of success'}]
+			
 			adda_records.searchTopics('ste', function(err,topics){
 				assert.notOk(err);
 				assert.deepEqual(expected_topics, topics);

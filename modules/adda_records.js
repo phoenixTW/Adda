@@ -27,6 +27,13 @@ var select = function (db, onComplete, tableName, retriveMethod, retrivalData, w
 	db[retriveMethod](query, onComplete);
 };
 
+var _addTopic = function(userData, db, onComplete){
+	var fields = ['name', 'description', 'userId',"start_time"];
+	var data = [userData.name, userData.description, userData.userId, userData.start_time];
+	console.log(data,"userData",userData);
+	insertInto(db, fields, data, 'topics', onComplete);
+};
+
 var _getUserInfo = function(db,onComplete){
 	select(db, onComplete, 'registration', 'all');
 };
@@ -51,6 +58,7 @@ var _getPassword = function (email_id, db, onComplete) {
 	var whereToGet = {email_Id: email_id};
 	select(db, onComplete, 'registration', 'get', ['password', 'id'], whereToGet);
 };
+
 
 exports.queryParser = {
 	selectQueryMaker: selectQueryMaker,
@@ -87,6 +95,10 @@ var _postComment = function (post, db, onComplete) {
 	insertInto(db, fields, whatToSend, 'comments', onComplete);
 };
 
+var _getTopicInfo = function(db,onComplete){
+	select(db, onComplete, 'topics', 'all');
+}
+
 var init = function(location){	
 	var operate = function(operation){
 		return function(){
@@ -109,6 +121,8 @@ var init = function(location){
 		getUserInfo:operate(_getUserInfo),
 		getPassword:operate(_getPassword),
 		getSingleUser:operate(_getSingleUser),
+		addTopic:operate(_addTopic),
+		getTopicInfo:operate(_getTopicInfo),
 		searchTopics:operate(_searchTopics),
 		postComment: operate(_postComment),
 		getComments: operate(_getComments),
