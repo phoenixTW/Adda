@@ -2,9 +2,21 @@ extends layout
 block vars
  - var title = "Topics"
 block headcontent
- script(type="text/javascript",src="./node_modules/angular/angular.js")
- script(type="text/javascript",src="./public/javascript/angularAutoSearch.js")
 block content
- div
-  p <input auto-complete ui-items="names" ng-model="selected">selected = {{selected}}
-    input(type="button" value="Search")
+ center
+  h1 Select your topics here
+  hr
+  div
+   form(action="/addaTopic", method="POST")
+    span
+     input(type="text" name="searchText" placeholder="Enter topic name")
+     input(type="submit" value="Search")
+   if name
+    table(style="width:10%,float:left")
+     tr
+      td
+       div
+        ol
+         each topic in name
+          li
+            a(href="#{topic.name}") #{topic.name}

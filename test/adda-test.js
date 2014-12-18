@@ -117,7 +117,16 @@ describe('adda_records',function(){
 		it('should give all topics started with step',function(done){
 			var expected_topics = [{name:'step'},{name:'step of success'}]
 			adda_records.searchTopics('ste', function(err,topics){
-				console.log("aaaaaaaaaaaaaaaaa",topics)
+				assert.notOk(err);
+				assert.deepEqual(expected_topics, topics);
+				done();
+			});
+		});
+	});
+	describe('#getAllTopics',function(){
+		it('should give all topics',function(done){
+			var expected_topics = [{name:'step'},{name:'step of success'},{name:'soda'}]
+			adda_records.getAllTopics(function(err,topics){
 				assert.notOk(err);
 				assert.deepEqual(expected_topics, topics);
 				done();

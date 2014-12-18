@@ -67,16 +67,15 @@ var _getSingleUser = function(email_id,db,onComplete){
 	var whereToGet = {email_id: email_id};
 	select(db, onComplete, 'registration', 'get', null, whereToGet);
 };
-var _searchTopics = function(startChars,db,onComplete){console.log(startChars,db);
+var _searchTopics = function(startChars,db,onComplete){
 	var searchTopicsQry = "select name from topics where name like '%"+startChars+"%'";
-	try{
-		db.all(searchTopicsQry,onComplete);
-	}
-	catch(err){
-		throw new err;
-	}
+	db.all(searchTopicsQry,onComplete);
 }
+var _getAllTopics = function(db,onComplete){
+	searchTopicsQry = "select name from topics";
+	db.all("select name from topics",onComplete);
 
+}
 var _getComments = function (topicId, db, onComplete) {
 	var whereToGet = {topic_id: topicId};
 	select(db, onComplete, 'comments', 'all', null, whereToGet);
@@ -112,7 +111,8 @@ var init = function(location){
 		getSingleUser:operate(_getSingleUser),
 		searchTopics:operate(_searchTopics),
 		postComment: operate(_postComment),
-		getComments: operate(_getComments)
+		getComments: operate(_getComments),
+		getAllTopics:operate(_getAllTopics)
 	};
 	return records;
 };

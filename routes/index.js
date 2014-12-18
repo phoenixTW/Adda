@@ -35,6 +35,25 @@ router.get('/', function(req, res) {
   res.render('index');
 });
 
+router.get('/addaTopic', function(req, res) {
+  res.render('addaTopic');
+});
+
+router.post('/addaTopic', function(req, res) {
+	var data = req.body;
+	var callback = function(error,topics){
+		console.log(topics);
+		(error || topics == []) && res.render('addaTopic',{error:"Topic not found.."});
+		(!error && topics.length>0) && res.render('addaTopic',{name:topics});
+	};
+	if(data.searchText == ''){
+		lib.getAllTopics(callback);
+	}
+	else
+		lib.searchTopics(data.searchText,callback);
+});
+
+
 router.get('/registration',function(req,res){
 	res.render('registration');
 });
