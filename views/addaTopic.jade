@@ -1,0 +1,10 @@
+extends layout
+block vars
+ - var title = "Topics"
+block headcontent
+ script(type="text/javascript",src="./node_modules/angular/angular.js")
+ script(type="text/javascript",src="./public/javascript/angularAutoSearch.js")
+block content
+ div
+  p <input auto-complete ui-items="names" ng-model="selected">selected = {{selected}}
+    input(type="button" value="Search")

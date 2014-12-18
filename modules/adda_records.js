@@ -69,6 +69,15 @@ var _getSingleUser = function(email_id,db,onComplete){
 	var whereToGet = {email_id: email_id};
 	select(db, onComplete, 'registration', 'get', null, whereToGet);
 };
+var _searchTopics = function(startChars,db,onComplete){console.log(startChars,db);
+	var searchTopicsQry = "select name from topics where name like '%"+startChars+"%'";
+	try{
+		db.all(searchTopicsQry,onComplete);
+	}
+	catch(err){
+		throw new err;
+	}
+}
 
 var init = function(location){	
 	var operate = function(operation){
@@ -91,7 +100,8 @@ var init = function(location){
 		insertUsers:operate(_insertUsers),
 		getUserInfo:operate(_getUserInfo),
 		getPassword:operate(_getPassword),
-		getSingleUser:operate(_getSingleUser)
+		getSingleUser:operate(_getSingleUser),
+		searchTopics:operate(_searchTopics)
 	};
 	return records;
 };
