@@ -49,7 +49,7 @@ var retrieveWhereToGet = function (resource) {
 
 var _getPassword = function (email_id, db, onComplete) {
 	var whereToGet = {email_Id: email_id};
-	select(db, onComplete, 'registration', 'get', ['password'], whereToGet);
+	select(db, onComplete, 'registration', 'get', ['password', 'id'], whereToGet);
 };
 
 exports.queryParser = {
@@ -73,9 +73,9 @@ var _getComments = function (topicId, db, onComplete) {
 	select(db, onComplete, 'comments', 'all', null, whereToGet);
 };
 
-var _postComment = function (data, db, onComplete) {
+var _postComment = function (post, db, onComplete) {
 	var fields = ['topic_id', 'comment', 'userId', 'time'];
-	var whatToSend = [data.topicId, data.comment, data.userId, data.time];
+	var whatToSend = [post.topicId, post.comment, post.userId, post.time];
 	insertInto(db, fields, whatToSend, 'comments', onComplete);
 };
 
