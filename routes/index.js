@@ -1,8 +1,36 @@
 var express = require('express');
 var lib = require('../modules/adda_records').init("data/adda.db");
 var router = express.Router();
+var bcrypt = require("bcryptjs");
+// var salt = bcrypt.genSaltSync(10);
 
 /* GET home page. */
+
+var loadUserFromSession = function(req,res,next){
+	req.session.userEmail && lib.getSingleUser(req.session.userEmail, function(err, user){
+		if(user){
+			var userInfo = {
+				id: user.id,
+				name: user.name,
+				email_id: user.email_id
+			};
+
+			req.user = userInfo;
+			res.locals.user = userInfo;
+		}else{
+			delete req.session.userEmail;
+		}
+	});
+	next();		
+};
+
+var requireLogin = function(req,res,next){
+	req.session.userEmail? next(): res.redirect('/login');
+};
+
+router.use(loadUserFromSession);
+/////////////////////////////////////////////////////////////
+
 router.get('/', function(req, res) {
   res.render('index');
 });
@@ -11,7 +39,7 @@ router.get('/registration',function(req,res){
 	res.render('registration');
 });
 
-router.get('/dashboard',function(req,res){
+router.get('/dashboard',requireLogin, function(req,res){
 	res.render('dashboard');
 });
 
@@ -22,18 +50,28 @@ router.get('/login',function(req,res){
 router.post('/login',function(req,res){
 	var userInfo = req.body;
 	var callback = function(error,password){
-		cosole.log(error);
-		error || (password == undefined) || (password.password!==userInfo.password) &&
+		if(((password===undefined) || error || 
+			(!bcrypt.compareSync(userInfo.password,password.password)))){
 		 	res.render('login', {error:"Invalid Username or Password.."});
-		!error && (password.password===userInfo.password) &&
-			res.redirect('dashboard');	
+		}
+		if(!error && (password!==undefined) && 
+			bcrypt.compareSync(userInfo.password,password.password)){
+			req.session.userEmail = userInfo.email_id;
+  			res.redirect('/dashboard');
+		}
 	};
 
 	lib.getPassword(userInfo.email_id,callback);
 });
 
+router.get('/logout',function(req,res){
+	req.session.destroy();
+	res.redirect('/login');
+});
+
 router.post('/registration',function(req,res){
 	var userInfo = req.body;
+	userInfo.password = bcrypt.hashSync(userInfo.password);
 	var callback = function(error){
 		error && res.render('registration', {error:"User already present.."});
 		!error && res.redirect('dashboard');

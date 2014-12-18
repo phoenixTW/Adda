@@ -17,8 +17,8 @@
     "jade": "~1.6.0",
     "passport": "~0.2.1",
     "passport-local": "~1.0.0",
-    "express-session": "~1.9.3"
-
+    "express-session": "~1.9.3",
+    "bcryptjs":"~2.1.0"
   },
   "devDependencies":{
     "chai": "1.10.0"

@@ -1,22 +1,5 @@
 var sqlite3 = require("sqlite3").verbose();
 
-// var _insertUsers = function(userData,db,onComplete){
-// 	var insertUsersQuery = 'insert into registration (name, email_id, password) values("'+
-// 		userData.name+'", "'+userData.email_id+'", "'+userData.password+'");';
-// 	db.run(insertUsersQuery,onComplete);
-// };
-
-// var _getUserInfo = function(db,onComplete){
-// 	var getUserInfoQry = "select * from registration";
-// 	db.all(getUserInfoQry,onComplete);
-// };
-
-// var _getPassword = function(email_id,db,onComplete){
-// 	var getPwdQry = "select password from registration where email_id = '" +
-// 		email_id+"';";
-// 	db.get(getPwdQry,onComplete);
-// };
-
 var insertQueryMaker = function (tableName, data, fields) {
 	var columns = fields && ' (' + fields.join(', ') + ')' || '';
 	var values = '"' + data.join('", "') + '"';
@@ -80,6 +63,12 @@ exports.queryHandler = {
 	insertInto: insertInto
 };
 
+var _getSingleUser = function(email_id,db,onComplete){
+	// var getUsrQry = "select * from registration where email_id = '" +
+	// 	email_id+"';";
+	var whereToGet = {email_id: email_id};
+	select(db, onComplete, 'registration', 'get', null, whereToGet);
+};
 
 var init = function(location){	
 	var operate = function(operation){
@@ -101,7 +90,8 @@ var init = function(location){
 	var records = {		
 		insertUsers:operate(_insertUsers),
 		getUserInfo:operate(_getUserInfo),
-		getPassword:operate(_getPassword)
+		getPassword:operate(_getPassword),
+		getSingleUser:operate(_getSingleUser)
 	};
 	return records;
 };
