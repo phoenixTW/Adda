@@ -57,6 +57,7 @@ router.post('/login',function(req,res){
 			bcrypt.compareSync(userInfo.password,data.password)){
 			req.session.userEmail = userInfo.email_id;
 			req.session.user_id = data.id;
+			// req.session.userId = password.id;
   			res.redirect('/dashboard');
 		}
 	};
@@ -96,6 +97,31 @@ router.post('/addtopics',function(req,res){
 
 router.get('/topic', function (req, res) {
 	res.render('topic');
+});
+
+router.get('/topic/:id', function (req, res) {
+	res.render('topic', {id: req.params.id});
+});
+
+router.post('/postComment/:id', function (req, res) {
+	var post = {
+		comment: req.body.comment,
+		userId: req.session.userId,
+		time: new Date(),
+		topicId: req.params.id
+	};
+
+	var onComplete = function (error, posts) {
+		error && next();
+		if(posts) {
+			res.render('topic', {id: req.params.id, comments: posts});
+		}
+	};
+
+	var callback = function (err) {
+		lib.getComments(post.topicId, onComplete);
+	}
+	lib.postComment(post, callback);
 });
 
 module.exports = router;

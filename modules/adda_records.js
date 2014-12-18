@@ -72,10 +72,28 @@ exports.queryHandler = {
 };
 
 var _getSingleUser = function(email_id,db,onComplete){
-	// var getUsrQry = "select * from registration where email_id = '" +
-	// 	email_id+"';";
 	var whereToGet = {email_id: email_id};
 	select(db, onComplete, 'registration', 'get', null, whereToGet);
+};
+var _searchTopics = function(startChars,db,onComplete){console.log(startChars,db);
+	var searchTopicsQry = "select name from topics where name like '%"+startChars+"%'";
+	try{
+		db.all(searchTopicsQry,onComplete);
+	}
+	catch(err){
+		throw new err;
+	}
+}
+
+var _getComments = function (topicId, db, onComplete) {
+	var whereToGet = {topic_id: topicId};
+	select(db, onComplete, 'comments', 'all', null, whereToGet);
+};
+
+var _postComment = function (post, db, onComplete) {
+	var fields = ['topic_id', 'comment', 'userId', 'time'];
+	var whatToSend = [post.topicId, post.comment, post.userId, post.time];
+	insertInto(db, fields, whatToSend, 'comments', onComplete);
 };
 
 var _getTopicInfo = function(db,onComplete){
@@ -105,7 +123,10 @@ var init = function(location){
 		getPassword:operate(_getPassword),
 		getSingleUser:operate(_getSingleUser),
 		addTopic:operate(_addTopic),
-		getTopicInfo:operate(_getTopicInfo)
+		getTopicInfo:operate(_getTopicInfo),
+		searchTopics:operate(_searchTopics),
+		postComment: operate(_postComment),
+		getComments: operate(_getComments)
 	};
 	return records;
 };

@@ -31,7 +31,38 @@ describe('adda_records',function(){
 		});
 	});
 
-	describe('#getPassword',function(){
+	describe('#postComment',function(){
+		it('insert "nice game" by Kaustav Chakraborty into comments table',function(done){
+			var post = {
+				comment: 'nice game',
+				userId: '1',
+				topicId: '1',
+				time: '02/03/2014'
+			};
+
+			var expectedComment = [
+				{ 	topic_id: '1',
+					comment: 'nice game',
+					userId: '1',
+					time: '02/03/2014'
+				}
+			];
+
+			var retriveComments = function(err, comments) {
+				assert.notOk(err);
+				assert.deepEqual(comments, expectedComment);
+				done();
+			};
+
+			var callback = function(error){
+				assert.notOk(error);
+				adda_records.getComments('1', retriveComments);
+			};
+			adda_records.postComment(post, callback)
+		});
+	});
+
+		describe('#getPassword',function(){
 		it('should give 12345 for kaustav.ron@gmail.com',function(done){
 			var email_id = "kaustav.ron@gmail.com";
 			var expected_password = "12345";
@@ -93,15 +124,28 @@ describe('adda_records',function(){
 
 			var callback = function(error,topicInfo){
 				assert.notOk(error);
-				topic.id = 3;
+				topic.id = 4;
 				topic.end_time = null;
-				assert.deepEqual(topicInfo[2],topic);
+				assert.deepEqual(topicInfo[3],topic);
 				done();
 			};
 
 			adda_records.addTopic(topic, function(err){
 				assert.notOk(err);
 				adda_records.getTopicInfo(callback);
+			});
+		});
+	});
+
+	describe('#searchTopics',function(){
+		it('should give all topics started with step',function(done){
+			var expected_topics = [{name:'step'},{name:'step of success'}]
+			
+			adda_records.searchTopics('ste', function(err,topics){
+				console.log("aaaaaaaaaaaaaaaaa",topics)
+				assert.notOk(err);
+				assert.deepEqual(expected_topics, topics);
+				done();
 			});
 		});
 	});
