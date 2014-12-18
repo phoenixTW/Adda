@@ -12,6 +12,7 @@ a {
 	width: 800px;
 	margin: 10%;
 	border: 1px black solid;
+	overflow: scroll;
 }
 
 .load-button {

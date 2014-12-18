@@ -57,6 +57,7 @@ router.post('/login',function(req,res){
 			bcrypt.compareSync(userInfo.password,data.password)){
 			req.session.userEmail = userInfo.email_id;
 			req.session.user_id = data.id;
+			req.session.name = data.name;
 			// req.session.userId = password.id;
   			res.redirect('/dashboard');
 		}
@@ -88,25 +89,38 @@ router.post('/addtopics',function(req,res){
 	var userInfo = req.body;
 	userInfo.userId = req.session.user_id; 
 	userInfo.start_time = new Date();
+	
+	var getTopicId = function (err, topicId) {
+		err && res.render('addtopics', {error:error});
+		!err && res.redirect('/topic/' + topicId.id);
+	};
+
 	var callback = function(error){
 		error && res.render('addtopics', {error:error});
-		!error && res.redirect('addtopics');	
-	}
+		!error && lib.getTopicId(userInfo.name, getTopicId);	
+	};
+	
 	lib.addTopic(userInfo,callback);
 });
 
-router.get('/topic', function (req, res) {
-	res.render('topic');
-});
-
 router.get('/topic/:id', function (req, res) {
-	res.render('topic', {id: req.params.id});
+	var id = req.params.id;
+	var onComplete = function (error, posts) {
+		error && next();
+		if(posts) {
+			console.log(posts);
+			posts.id = id;
+			res.render('topic', {posts: posts});
+		}
+	};
+
+	lib.getComments(id, onComplete);
 });
 
 router.post('/postComment/:id', function (req, res) {
 	var post = {
 		comment: req.body.comment,
-		userId: req.session.userId,
+		userId: req.session.name,
 		time: new Date(),
 		topicId: req.params.id
 	};
@@ -114,7 +128,7 @@ router.post('/postComment/:id', function (req, res) {
 	var onComplete = function (error, posts) {
 		error && next();
 		if(posts) {
-			res.render('topic', {id: req.params.id, comments: posts});
+			res.redirect('/topic/'+req.params.id);
 		}
 	};
 

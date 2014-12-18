@@ -18,7 +18,14 @@ block content
   div(class = "commentHolder")
    div(id = "comment" class = "comment")
     input(type = "submit" id = "load" class = "load-button" value = "load complete")
-   form(id = "enterComment" class = "enterComment" action = "/postComment/#{id}" method = "POST")
+    each post in posts
+     div 
+       p Name : #{post.userId}
+       p Date: #{post.time}
+       p Comment: #{post.comment}
+       <hr></hr>
+
+   form(action = "/postComment/#{posts.id}" method = "POST")
     span
      input(type = "text" class = "inputBox" name ="comment" placeholder = "My current comment............")
      input(type = "submit" id = "post" class = "post" value = "submit")
