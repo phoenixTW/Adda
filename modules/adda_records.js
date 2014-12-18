@@ -17,6 +17,12 @@ var _getPassword = function(email_id,db,onComplete){
 	db.get(getPwdQry,onComplete);
 };
 
+var _getSingleUser = function(email_id,db,onComplete){
+	var getUsrQry = "select * from registration where email_id = '" +
+		email_id+"';";
+	db.get(getUsrQry,onComplete);
+};
+
 var init = function(location){	
 	var operate = function(operation){
 		return function(){
@@ -37,7 +43,8 @@ var init = function(location){
 	var records = {		
 		insertUsers:operate(_insertUsers),
 		getUserInfo:operate(_getUserInfo),
-		getPassword:operate(_getPassword)
+		getPassword:operate(_getPassword),
+		getSingleUser:operate(_getSingleUser)
 	};
 	return records;
 };
