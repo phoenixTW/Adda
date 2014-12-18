@@ -48,17 +48,19 @@ router.get('/login',function(req,res){
 
 router.post('/login',function(req,res){
 	var userInfo = req.body;
-	var callback = function(error,password){
-		if(((password===undefined) || error || 
-			(!bcrypt.compareSync(userInfo.password,password.password)))){
+	var callback = function(error,data){
+		if(((data===undefined) || error || 
+			(!bcrypt.compareSync(userInfo.password,data.password)))){
 		 	res.render('login', {error:"Invalid Username or Password.."});
 		}
-		if(!error && (password!==undefined) && 
-			bcrypt.compareSync(userInfo.password,password.password)){
+		if(!error && (data!==undefined) && 
+			bcrypt.compareSync(userInfo.password,data.password)){
 			req.session.userEmail = userInfo.email_id;
+			req.session.user_id = data.id;
   			res.redirect('/dashboard');
 		}
 	};
+
 	lib.getPassword(userInfo.email_id,callback);
 });
 
@@ -77,13 +79,23 @@ router.post('/registration',function(req,res){
 	lib.insertUsers(userInfo,callback);
 });
 
-router.get('/topics',function(req,res){
-	res.render('topics');
+router.get('/addtopics',function(req,res){
+	res.render('addtopics');
 });
 
-router.post('/topics',function(req,res){
-	console.log(req.body);
+router.post('/addtopics',function(req,res){
+	var userInfo = req.body;
+	userInfo.userId = req.session.user_id; 
+	userInfo.start_time = new Date();
+	var callback = function(error){
+		error && res.render('addtopics', {error:error});
+		!error && res.redirect('addtopics');	
+	}
+	lib.addTopic(userInfo,callback);
 });
 
+router.get('/topic', function (req, res) {
+	res.render('topic');
+});
 
 module.exports = router;

@@ -31,7 +31,7 @@ describe('adda_records',function(){
 		});
 	});
 
-		describe('#getPassword',function(){
+	describe('#getPassword',function(){
 		it('should give 12345 for kaustav.ron@gmail.com',function(done){
 			var email_id = "kaustav.ron@gmail.com";
 			var expected_password = "12345";
@@ -39,6 +39,69 @@ describe('adda_records',function(){
 				assert.notOk(err);
 				assert.deepEqual(password.password, expected_password);
 				done();
+			});
+		});
+
+	describe('queryParser', function () {
+		describe('#selectQueryMaker', function() {
+			it('should return select * from tableName if no data is given', function () {
+				var expectedQuery = 'select * from tableName;';
+				assert.deepEqual(lib.queryParser.selectQueryMaker('tableName'), expectedQuery);
+			});
+
+			it('should return select field from tableName if field is given as select object', function () {
+				var expectedQuery = 'select field from tableName;';
+				assert.deepEqual(lib.queryParser.selectQueryMaker('tableName', ['field']), expectedQuery);
+			});
+
+			it('should return select field from tableName where email = "kaustav.ron@gmail.com" if field is given as select object', function () {
+				var expectedQuery = 'select field from tableName where email = "kaustav.ron@gmail.com";';
+				assert.deepEqual(lib.queryParser.selectQueryMaker('tableName', ['field'], {email: 'kaustav.ron@gmail.com'}), expectedQuery);
+			});
+
+			it('should return select field1, field2 from tableName where email = "kaustav.ron@gmail.com" and name = "Kaustav Chakraborty" if field is given as select object', function () {
+				var expectedQuery = 'select field1, field2 from tableName where email = "kaustav.ron@gmail.com" and name = "Kaustav Chakraborty";';
+				assert.deepEqual(lib.queryParser.selectQueryMaker('tableName', ['field1', 'field2'], {
+					email: 'kaustav.ron@gmail.com',
+					name: 'Kaustav Chakraborty'
+				}), expectedQuery);
+			});
+		});
+
+		describe('#insertQueryMaker', function() {
+			it('should return insert into tableName values ("value1", "value2") if no data is given', function () {
+				var expectedQuery = 'insert into tableName values("value1", "value2");';
+				assert.deepEqual(lib.queryParser.insertQueryMaker('tableName', ['value1', 'value2']), expectedQuery);
+			});
+
+			it('should return insert into (field1, field2) tableName values ("value1", "value2") if field is given as select object', function () {
+					var expectedQuery = 'insert into tableName (field1, field2) values("value1", "value2");';
+					assert.deepEqual(lib.queryParser.insertQueryMaker('tableName', ['value1', 'value2'], ['field1', 'field2']), expectedQuery);
+				});
+			});
+		});
+	});
+
+	describe('#addTopic',function(){
+		it('insert new topic into topics table along with userId and time',function(done){
+			var topic = {
+				name: 'hocky',
+				description: 'hocky is our national game',
+				userId: 1,
+				start_time:"GMT 15:30",
+			};
+
+			var callback = function(error,topicInfo){
+				assert.notOk(error);
+				topic.id = 3;
+				topic.end_time = null;
+				assert.deepEqual(topicInfo[2],topic);
+				done();
+			};
+
+			adda_records.addTopic(topic, function(err){
+				assert.notOk(err);
+				adda_records.getTopicInfo(callback);
 			});
 		});
 	});
