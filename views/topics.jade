@@ -1,0 +1,21 @@
+extends layout
+block vars
+ - var title = "Topics"
+
+block content
+  h1 Start New Topics
+  if error
+   p ERROR: #{error}
+  form(action="/topics" method="POST")
+   span 
+    |Topic Name:
+    input(type="text" name="topicName" required)
+   br
+   span 
+    |Discription:
+    input(type="text" name="discription" required)
+   br
+   span 
+    input(type="hidden" name="userId")
+   br
+   input(type="submit" value="Submit")
