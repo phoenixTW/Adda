@@ -1,6 +1,9 @@
 var express = require('express');
 var lib = require('../modules/adda_records').init("data/adda.db");
 var router = express.Router();
+var bcrypt = require("bcryptjs");
+
+// var salt = bcrypt.genSaltSync(10);
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -22,9 +25,11 @@ router.get('/login',function(req,res){
 router.post('/login',function(req,res){
 	var userInfo = req.body;
 	var callback = function(error,password){
-		error || (password.password!==userInfo.password) &&
+		((password===undefined) || error || 
+			(!bcrypt.compareSync(userInfo.password,password.password))) &&
 		 	res.render('login', {error:"Invalid Username or Password.."});
-		!error && (password.password===userInfo.password) &&
+		!error && (password!==undefined) && 
+		bcrypt.compareSync(userInfo.password,password.password) &&
 			res.redirect('dashboard');	
 	};
 	lib.getPassword(userInfo.email_id,callback);
@@ -32,6 +37,7 @@ router.post('/login',function(req,res){
 
 router.post('/registration',function(req,res){
 	var userInfo = req.body;
+	userInfo.password = bcrypt.hashSync(userInfo.password);
 	var callback = function(error){
 		error && res.render('registration', {error:"User already present.."});
 		!error && res.redirect('dashboard');
