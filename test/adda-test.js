@@ -141,7 +141,7 @@ describe('adda_records',function(){
 
 	describe('#searchTopics',function(){
 		it('should give all topics started with step',function(done){
-			var expected_topics = [{name:'step'},{name:'step of success'}]
+			var expected_topics = [{id:1,name:'step'},{id:2,name:'step of success'}]
 			
 			adda_records.searchTopics('ste', function(err,topics){
 				assert.notOk(err);
@@ -152,7 +152,7 @@ describe('adda_records',function(){
 	});
 	describe('#getAllTopics',function(){
 		it('should give all topics',function(done){
-			var expected_topics = [{name:'step'},{name:'step of success'},{name:'soda'}]
+			var expected_topics = [{id:1,name:'step'},{id:2,name:'step of success'},{id:3,name:'soda'}]
 			adda_records.getAllTopics(function(err,topics){
 				assert.notOk(err);
 				assert.deepEqual(expected_topics, topics);

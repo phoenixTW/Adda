@@ -76,12 +76,12 @@ var _getSingleUser = function(email_id,db,onComplete){
 	select(db, onComplete, 'registration', 'get', null, whereToGet);
 };
 var _searchTopics = function(startChars,db,onComplete){console.log(startChars);
-	var searchTopicsQry = "select name from topics where name like '%"+startChars+"%'";
+	var searchTopicsQry = "select id,name from topics where name like '%"+startChars+"%'";
 	db.all(searchTopicsQry,onComplete);
 }
 var _getAllTopics = function(db,onComplete){
-	searchTopicsQry = "select name from topics";
-	db.all("select name from topics",onComplete);
+	searchTopicsQry = "select id,name from topics";
+	db.all(searchTopicsQry,onComplete);
 
 }
 var _getComments = function (topicId, db, onComplete) {
