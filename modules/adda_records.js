@@ -30,7 +30,6 @@ var select = function (db, onComplete, tableName, retriveMethod, retrivalData, w
 var _addTopic = function(userData, db, onComplete){
 	var fields = ['name', 'description', 'userId',"start_time"];
 	var data = [userData.name, userData.description, userData.userId, userData.start_time];
-	console.log(data,"userData",userData);
 	insertInto(db, fields, data, 'topics', onComplete);
 };
 
@@ -75,7 +74,7 @@ var _getSingleUser = function(email_id,db,onComplete){
 	var whereToGet = {email_id: email_id};
 	select(db, onComplete, 'registration', 'get', null, whereToGet);
 };
-var _searchTopics = function(startChars,db,onComplete){console.log(startChars,db);
+var _searchTopics = function(startChars,db,onComplete){
 	var searchTopicsQry = "select name from topics where name like '%"+startChars+"%'";
 	try{
 		db.all(searchTopicsQry,onComplete);
@@ -98,7 +97,11 @@ var _postComment = function (post, db, onComplete) {
 
 var _getTopicInfo = function(db,onComplete){
 	select(db, onComplete, 'topics', 'all');
-}
+};
+
+var _getTopics = function(userId,db,onComplete){
+	select(db,onComplete,"topics",'all',["name"],{userId:userId});
+};
 
 var init = function(location){	
 	var operate = function(operation){
@@ -126,7 +129,8 @@ var init = function(location){
 		getTopicInfo:operate(_getTopicInfo),
 		searchTopics:operate(_searchTopics),
 		postComment: operate(_postComment),
-		getComments: operate(_getComments)
+		getComments: operate(_getComments),
+		getTopics:operate(_getTopics)
 	};
 	return records;
 };

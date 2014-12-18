@@ -142,9 +142,20 @@ describe('adda_records',function(){
 			var expected_topics = [{name:'step'},{name:'step of success'}]
 			
 			adda_records.searchTopics('ste', function(err,topics){
-				console.log("aaaaaaaaaaaaaaaaa",topics)
 				assert.notOk(err);
 				assert.deepEqual(expected_topics, topics);
+				done();
+			});
+		});
+	});
+
+	describe('#getTopics',function(){
+		it('should give 1st politics then hocky',function(done){
+			var userId = 1;
+			var expected_topics = [{"name":"step"},{"name":"soda"},{"name":"hocky"}];
+			adda_records.getTopics(userId,function(err,topic){
+				assert.notOk(err);
+				assert.deepEqual(topic,expected_topics);
 				done();
 			});
 		});

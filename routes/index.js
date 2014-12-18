@@ -90,7 +90,7 @@ router.post('/addtopics',function(req,res){
 	userInfo.start_time = new Date();
 	var callback = function(error){
 		error && res.render('addtopics', {error:error});
-		!error && res.redirect('addtopics');	
+		!error && res.redirect('topic/'+req.session.user_id);	
 	}
 	lib.addTopic(userInfo,callback);
 });
