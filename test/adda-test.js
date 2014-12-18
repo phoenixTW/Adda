@@ -160,4 +160,16 @@ describe('adda_records',function(){
 			});
 		});
 	});
+
+	describe('#getTopics',function(){
+		it('should give 1st politics then hocky',function(done){
+			var userId = 1;
+			var expected_topics = [{"name":"step"},{"name":"soda"},{"name":"hocky"}];
+			adda_records.getTopics(userId,function(err,topic){
+				assert.notOk(err);
+				assert.deepEqual(topic,expected_topics);
+				done();
+			});
+		});
+	});
 });

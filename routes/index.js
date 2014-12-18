@@ -110,6 +110,25 @@ router.post('/registration',function(req,res){
 	lib.insertUsers(userInfo,callback);
 });
 
+router.get('/addtopics',function(req,res){
+	res.render('addtopics');
+});
+
+router.post('/addtopics',function(req,res){
+	var userInfo = req.body;
+	userInfo.userId = req.session.user_id; 
+	userInfo.start_time = new Date();
+	var callback = function(error){
+		error && res.render('addtopics', {error:error});
+		!error && res.redirect('topic/'+req.session.user_id);	
+	}
+	lib.addTopic(userInfo,callback);
+});
+
+router.get('/topic', function (req, res) {
+	res.render('topic');
+});
+
 router.get('/topic/:id', function (req, res) {
 	res.render('topic', {id: req.params.id});
 });
