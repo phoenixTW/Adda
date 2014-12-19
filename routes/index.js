@@ -38,14 +38,21 @@ router.get('/addtopics', function(req, res) {
   res.render('addtopics');
 });
 
+
 router.post('/addtopics',function(req,res){
 	var userInfo = req.body;
-	userInfo.userId = req.session.user_id; 
+	userId = req.session.user_id;
+	userInfo.userId = userId; 
 	userInfo.start_time = new Date();
-	console.log(userInfo);
+	console.log(req.body)
+	var getTopicId = function(err,topics){
+		console.log(topics);
+		!err && res.redirect('topic/'+topics["max(id)"]);
+	};
+
 	var callback = function(error){
 		error && res.render('addtopics', {error:error});
-		!error && res.redirect('topic/'+req.session.user_id);	
+		!error && lib.getTopicId(req.body.name,getTopicId)	
 	}
 	lib.addTopic(userInfo,callback);
 });
@@ -92,7 +99,6 @@ router.post('/login',function(req,res){
 			req.session.userEmail = userInfo.email_id;
 			req.session.user_id = data.id;
 			req.session.name = data.name;
-			// req.session.userId = password.id;
   			res.redirect('/dashboard');
 		};
 	};

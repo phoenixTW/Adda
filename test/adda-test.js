@@ -263,4 +263,21 @@ describe('adda_records',function(){
 			});
 		});
 	});
+
+	describe('#getTopicId',function(){
+		it('should give Id of a topic by given topic',function(done){
+			adda_records.getTopicId("soda",function(err,topicId){
+				assert.notOk(err);
+				assert.deepEqual({"max(id)":3},topicId);
+				done();
+			});
+		});
+		it('should give Id of a topic by given topic',function(done){
+			adda_records.getTopicId("step",function(err,topicId){
+				assert.notOk(err);
+				assert.deepEqual({"max(id)":1},topicId);
+				done();
+			});
+		});
+	});
 });
