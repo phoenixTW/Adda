@@ -1,6 +1,8 @@
 extends layout
 block vars
  - var title = "Adda-Topic"
+block headcontent
+ script(type= "text/javascript" src= "/javascript/load-comment.js")
 block content
  h1 WELCOME TO TOPIC
  h2 TOPIC : #{details.name}
@@ -16,10 +18,10 @@ block content
     | close-time : #{details.end_time}
    h4 description: #{details.description}
   input(type = "submit" id = "action" value = "join")
-  div(class = "commentHolder")
+  div(class = "commentHolder" id = "commentHolder")
+   input(type = "submit" id = "load" class = "load-button" value = "load complete")
    div(id = "comment" class = "comment")
-    input(type = "submit" id = "load" class = "load-button" value = "load complete")
-    div
+    //- div(id = "showAllComments" class = "showAllComments")
     each post in posts
      div 
        p Name : #{post.userId}

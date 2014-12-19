@@ -34,7 +34,7 @@ router.get('/', function(req, res) {
   res.render('index');
 });
 
-router.get('/addtopics', function(req, res) {
+router.get('/addtopics',requireLogin, function(req, res) {
   res.render('addtopics');
 });
 
@@ -133,7 +133,7 @@ router.post('/addtopics',function(req,res){
 	lib.addTopic(userInfo,callback);
 });
 
-router.get('/topic/:id', function (req, res) {
+router.get('/topic/:id',requireLogin, function (req, res) {
 	var id = req.params.id;
 	
 	var onComplete = function (error, posts) {
@@ -143,7 +143,7 @@ router.get('/topic/:id', function (req, res) {
 			var callback = function (err, details) {
 				var getUser = function(err, userName) {
 					var data = {
-						posts: posts,
+						posts: posts.reverse(),
 						details: details,
 						adminName: userName.name
 					}

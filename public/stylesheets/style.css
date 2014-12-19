@@ -8,20 +8,21 @@ a {
 }
 
 .comment {
-	height: 200px;
-	width: 800px;
-	margin: 10%;
-	border: 1px black solid;
+	height: 400px;
+	border: 1px;
+	width: 900px;
+	margin-top: 4px;
 	overflow: scroll;
 }
 
 .load-button {
-	height: 20%;
+	height: 5%;
 	width: 100%;
 }
 
 .commentHolder {
-	height: 300px;
+	margin-top: 10px;
+	height: 500px;
 	width: 900px;
 }
 
