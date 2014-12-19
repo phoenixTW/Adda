@@ -69,7 +69,11 @@ router.get('/registration',function(req,res){
 });
 
 router.get('/dashboard',requireLogin, function(req,res){
-	res.render('dashboard');
+	lib.getTopics(req.session.user_id,function(err,topics){
+		var topics = topics.reverse();
+		err && req.render('dashboard',{error:err})
+		!err && res.render('dashboard',{topics:topics});
+	})
 });
 
 router.get('/login',function(req,res){

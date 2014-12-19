@@ -10,3 +10,7 @@ block content
    a(href = "/logout") Logout
   hr
   h2 My Latest Topics
+  div 
+   each topic in topics
+    li
+     a(href="topic/#{topic.id}") #{topic.name}

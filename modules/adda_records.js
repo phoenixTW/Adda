@@ -100,7 +100,7 @@ var _getTopicInfo = function(db,onComplete){
 };
 
 var _getTopics = function(userId,db,onComplete){
-	select(db,onComplete,"topics",'all',["name"],{userId:userId});
+	select(db,onComplete,"topics",'all',["name","id"],{userId:userId});
 };
 
 var init = function(location){	

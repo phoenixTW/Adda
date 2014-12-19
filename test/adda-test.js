@@ -126,8 +126,6 @@ describe('adda_records',function(){
 				assert.notOk(error);
 				topic.id = 4;
 				topic.end_time = null;
-				console.log(">>>>>>>>>>>>>>>",topicInfo[3]);
-				console.log(">>>>>>>>>>>>>>><<<<<<<<<<<<",topic);
 				assert.deepEqual(topicInfo[3],topic);
 				done();
 			};
@@ -162,9 +160,9 @@ describe('adda_records',function(){
 	});
 
 	describe('#getTopics',function(){
-		it('should give 1st politics then hocky',function(done){
+		it('should give the of name and id of a specific topicId ',function(done){
 			var userId = 1;
-			var expected_topics = [{"name":"step"},{"name":"soda"},{"name":"hocky"}];
+			var expected_topics = [{"name":"step",id:1},{"name":"soda",id:3},{"name":"hocky",id:4}];
 			adda_records.getTopics(userId,function(err,topic){
 				assert.notOk(err);
 				assert.deepEqual(topic,expected_topics);
