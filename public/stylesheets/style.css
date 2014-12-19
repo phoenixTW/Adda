@@ -34,3 +34,8 @@ a {
 	height: 30px;
 	width: 300px;
 }
+
+.logout{
+	margin-right: 30px;
+	color: blue;
+}

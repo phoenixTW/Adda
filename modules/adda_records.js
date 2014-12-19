@@ -103,7 +103,12 @@ var _getUserName = function (usrId, db, onComplete) {
 };
 
 var _getTopics = function(userId,db,onComplete){
-	select(db,onComplete,"topics",'all',["name"],{userId:userId});
+	select(db,onComplete,"topics",'all',["name","id"],{userId:userId});
+};
+
+var _getTopicId = function(topics,db,onComplete){
+	console.log(topics);
+	select(db,onComplete,"topics","get",["max(id)"],{name:topics})
 };
 
 var init = function(location){	
@@ -137,7 +142,8 @@ var init = function(location){
 		getTopicDetails: operate(_getTopicDetails),
 		getUserName: operate(_getUserName),
 		getTopics:operate(_getTopics),
-		getAllTopics:operate(_getAllTopics)
+		getAllTopics:operate(_getAllTopics),
+		getTopicId:operate(_getTopicId)
 	};
 	return records;
 };

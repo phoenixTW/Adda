@@ -38,14 +38,21 @@ router.get('/addtopics',requireLogin, function(req, res) {
   res.render('addtopics');
 });
 
+
 router.post('/addtopics',function(req,res){
 	var userInfo = req.body;
-	userInfo.userId = req.session.user_id; 
+	userId = req.session.user_id;
+	userInfo.userId = userId; 
 	userInfo.start_time = new Date();
-	console.log(userInfo);
+	console.log(req.body)
+	var getTopicId = function(err,topics){
+		console.log(topics);
+		!err && res.redirect('topic/'+topics["max(id)"]);
+	};
+
 	var callback = function(error){
 		error && res.render('addtopics', {error:error});
-		!error && res.redirect('topic/'+req.session.user_id);	
+		!error && lib.getTopicId(req.body.name,getTopicId)	
 	}
 	lib.addTopic(userInfo,callback);
 });
@@ -69,7 +76,11 @@ router.get('/registration',function(req,res){
 });
 
 router.get('/dashboard',requireLogin, function(req,res){
-	res.render('dashboard');
+	lib.getTopics(req.session.user_id,function(err,topics){
+		var topics = topics.reverse();
+		err && req.render('dashboard',{error:err})
+		!err && res.render('dashboard',{topics:topics});
+	})
 });
 
 router.get('/login',function(req,res){
@@ -88,7 +99,6 @@ router.post('/login',function(req,res){
 			req.session.userEmail = userInfo.email_id;
 			req.session.user_id = data.id;
 			req.session.name = data.name;
-			// req.session.userId = password.id;
   			res.redirect('/dashboard');
 		};
 	};

@@ -253,12 +253,29 @@ describe('adda_records',function(){
 	});
 
 	describe('#getTopics',function(){
-		it('should give 1st politics then hocky',function(done){
+		it('should give the of name and id of a specific topicId ',function(done){
 			var userId = 1;
-			var expected_topics = [{"name":"step"},{"name":"soda"},{"name":"hocky"}];
+			var expected_topics = [{"name":"step",id:1},{"name":"soda",id:3},{"name":"hocky",id:4}];
 			adda_records.getTopics(userId,function(err,topic){
 				assert.notOk(err);
 				assert.deepEqual(topic,expected_topics);
+				done();
+			});
+		});
+	});
+
+	describe('#getTopicId',function(){
+		it('should give Id of a topic by given topic',function(done){
+			adda_records.getTopicId("soda",function(err,topicId){
+				assert.notOk(err);
+				assert.deepEqual({"max(id)":3},topicId);
+				done();
+			});
+		});
+		it('should give Id of a topic by given topic',function(done){
+			adda_records.getTopicId("step",function(err,topicId){
+				assert.notOk(err);
+				assert.deepEqual({"max(id)":1},topicId);
 				done();
 			});
 		});

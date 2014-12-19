@@ -6,7 +6,12 @@ block content
   h1 wel-come to dashboard
   p
    a(href = "/addtopics") Add or Search Topics
-   br 
-   a(href = "/logout") Logout
+   br
+   div
+    a(href = "/logout").logout Logout
   hr
   h2 My Latest Topics
+  div 
+   each topic in topics
+    li
+     a(href="topic/#{topic.id}") #{topic.name}
