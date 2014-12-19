@@ -111,6 +111,11 @@ var _getTopicId = function(topics,db,onComplete){
 	select(db,onComplete,"topics","get",["max(id)"],{name:topics})
 };
 
+var _top5ActiveTopics = function(db,onComplete){
+	var top5Query = "select distinct id,name,description from topics order by id desc LIMIT 5";
+	db.all(top5Query,onComplete);
+};
+
 var init = function(location){	
 	var operate = function(operation){
 		return function(){
@@ -143,7 +148,8 @@ var init = function(location){
 		getUserName: operate(_getUserName),
 		getTopics:operate(_getTopics),
 		getAllTopics:operate(_getAllTopics),
-		getTopicId:operate(_getTopicId)
+		getTopicId:operate(_getTopicId),
+		top5ActiveTopics:operate(_top5ActiveTopics)
 	};
 	return records;
 };

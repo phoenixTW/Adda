@@ -1,6 +1,7 @@
 extends layout
 block vars
  - var title = "Adda-Topic"
+ - var flag = 1
 block headcontent
  script(type= "text/javascript" src= "/javascript/load-comment.js")
 block content
@@ -17,7 +18,12 @@ block content
     | start-time: #{details.start_time} &nbsp;&nbsp;&nbsp;
     | close-time : #{details.end_time}
    h4 description: #{details.description}
-  input(type = "submit" id = "action" value = "join")
+   if flag == 1
+    input(type = "submit" id = "action" value = "close")
+   if flag == 2
+    input(type = "submit" id = "action" value = "leave")
+   if flag == null
+    input(type = "submit" id = "action" value = "join")
   div(class = "commentHolder" id = "commentHolder")
    input(type = "submit" id = "load" class = "load-button" value = "load complete")
    div(id = "comment" class = "comment")

@@ -31,7 +31,9 @@ var requireLogin = function(req,res,next){
 router.use(loadUserFromSession);
 
 router.get('/', function(req, res) {
-  res.render('index');
+	lib.top5ActiveTopics(function(err,topics){
+  		res.render('index',{topics:topics});
+	})
 });
 
 router.get('/addtopics',requireLogin, function(req, res) {

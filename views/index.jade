@@ -4,7 +4,7 @@ block vars
 block content
  div
   center
-   h1 Welcome to S@DD@ - Adda
+   h1 Welcome to Adda
    <hr></hr>
    p For further access 
     a(href="/login") Login
@@ -12,5 +12,11 @@ block content
     a(href="/registration") Register
   br
  div
-  h1 TOP FIVE TOPICS
-  <hr></hr>
+  hr
+  h1 TOP FIVE MOST TOPICS
+  ol
+   each topic in topics
+    li 
+     h2 #{topic.name}
+     | #{topic.description}
+  

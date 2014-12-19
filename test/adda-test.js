@@ -263,7 +263,19 @@ describe('adda_records',function(){
 			});
 		});
 	});
-
+	describe('#top 5 Active Topics',function(){
+		it('should give 5 Active Topics',function(done){
+			var expected_topics = [{id:4,name:"hocky",description:"hocky is our national game"},
+			{id:3,name:"soda",description:"how to make drink"},
+			{id:2,name:"step of success",description:"nobel thought"},
+			{id:1,name:"step",description:"software technology excelence program"}];
+			adda_records.top5ActiveTopics(function(err,topic){
+				assert.notOk(err);
+				assert.deepEqual(topic,expected_topics);
+				done();
+			});
+		});
+	});
 	describe('#getTopicId',function(){
 		it('should give Id of a topic by given topic',function(done){
 			adda_records.getTopicId("soda",function(err,topicId){
