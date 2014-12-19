@@ -62,7 +62,7 @@ describe('adda_records',function(){
 		});
 	});
 
-		describe('#getPassword',function(){
+	describe('#getPassword',function(){
 		it('should give 12345 for kaustav.ron@gmail.com',function(done){
 			var email_id = "kaustav.ron@gmail.com";
 			var expected_password = "12345";
@@ -72,6 +72,25 @@ describe('adda_records',function(){
 				done();
 			});
 		});
+
+		it('should give 54321 for prasenjitc@gmail.com',function(done){
+			var email_id = "prasenjitc@gmail.com";
+			var expected_password = "54321";
+			adda_records.getPassword(email_id, function(err,password){
+				assert.notOk(err);
+				assert.deepEqual(password.password, expected_password);
+				done();
+			});
+		});
+
+		it('should give error for wrong@gmail.com',function(done){
+			var email_id = "wrong@gmail.com";
+			adda_records.getPassword(email_id, function(err,password){
+				assert.notOk(err);
+				done();
+			});
+		});
+	});
 
 	describe('queryParser', function () {
 		describe('#selectQueryMaker', function() {
@@ -106,9 +125,8 @@ describe('adda_records',function(){
 			});
 
 			it('should return insert into (field1, field2) tableName values ("value1", "value2") if field is given as select object', function () {
-					var expectedQuery = 'insert into tableName (field1, field2) values("value1", "value2");';
-					assert.deepEqual(lib.queryParser.insertQueryMaker('tableName', ['value1', 'value2'], ['field1', 'field2']), expectedQuery);
-				});
+				var expectedQuery = 'insert into tableName (field1, field2) values("value1", "value2");';
+				assert.deepEqual(lib.queryParser.insertQueryMaker('tableName', ['value1', 'value2'], ['field1', 'field2']), expectedQuery);
 			});
 		});
 	});
@@ -148,6 +166,81 @@ describe('adda_records',function(){
 			});
 		});
 	});
+
+	describe('#getUserInfo',function(){
+		it('should give all users in registration table',function(done){
+			var expected = [{
+				  "email_id": "kaustav.ron@gmail.com",
+				  "name": "Kaustav Chakraborty",
+				  "password": "12345",
+				  "id": 1
+				},
+				{
+				  "email_id": "prasenjitc@gmail.com",
+				  "name": "Prasenjit Chakraborty",
+				  "password": "54321",
+				  "id": 2
+				}
+			];
+
+			var callback = function(error, users) {
+				assert.notOk(error);
+				assert.lengthOf(users, 2);
+				assert.deepEqual(users, expected);
+				done();
+			};
+
+			adda_records.getUserInfo(callback);
+		});
+	});
+
+	describe('#getSingleUser',function(){
+		it('should give details for Kaustav Chakraborty by kaustav.ron@gmail.com',function(done){
+			var expected = {
+				  "email_id": "kaustav.ron@gmail.com",
+				  "name": "Kaustav Chakraborty",
+				  "password": "12345",
+				  "id": 1
+			};
+
+			var callback = function(error, user) {
+				assert.notOk(error);
+				assert.deepEqual(user, expected);
+				done();
+			};
+
+			adda_records.getSingleUser('kaustav.ron@gmail.com',callback);
+		});
+
+		it('should give details for Prasenjit Chakraborty by prasenjitc@gmail.com',function(done){
+			var expected = {
+				  "email_id": "prasenjitc@gmail.com",
+				  "name": "Prasenjit Chakraborty",
+				  "password": "54321",
+				  "id": 2
+			};
+
+			var callback = function(error, user) {
+				assert.notOk(error);
+				assert.deepEqual(user, expected);
+				done();
+			};
+
+			adda_records.getSingleUser('prasenjitc@gmail.com',callback);
+		});
+
+		it('should give error for Wrong Name by anything@gmail.com',function(done){
+
+			var callback = function(error, user) {
+				assert.notOk(error);
+				done();
+			};
+
+			adda_records.getSingleUser('anything@gmail.com',callback);
+		});
+
+	});	
+
 	describe('#getAllTopics',function(){
 		it('should give all topics',function(done){
 			var expected_topics = [{id:1,name:'step'},{id:2,name:'step of success'},{id:3,name:'soda'},{id:4,name:'hocky'}]

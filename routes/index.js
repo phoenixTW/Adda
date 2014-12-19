@@ -91,6 +91,8 @@ router.post('/login',function(req,res){
 			bcrypt.compareSync(userInfo.password,data.password)){
 			req.session.userEmail = userInfo.email_id;
 			req.session.user_id = data.id;
+			req.session.name = data.name;
+			// req.session.userId = password.id;
   			res.redirect('/dashboard');
 		};
 	};
@@ -113,14 +115,58 @@ router.post('/registration',function(req,res){
 	lib.insertUsers(userInfo,callback);
 });
 
+router.get('/addtopics',function(req,res){
+	res.render('addtopics');
+});
+
+router.post('/addtopics',function(req,res){
+	var userInfo = req.body;
+	userInfo.userId = req.session.user_id; 
+	userInfo.start_time = new Date();
+	
+	var getTopicId = function (err, topicId) {
+		err && res.render('addtopics', {error:error});
+		!err && res.redirect('/topic/' + topicId.id);
+	};
+
+	var callback = function(error){
+		error && res.render('addtopics', {error:error});
+		!error && lib.getTopicId(userInfo.name, getTopicId);	
+	};
+	
+	lib.addTopic(userInfo,callback);
+});
+
 router.get('/topic/:id', function (req, res) {
-	res.render('topic', {id: req.params.id});
+	var id = req.params.id;
+	
+	var onComplete = function (error, posts) {
+		error && next();
+		if(posts) {
+			posts.id = id;
+			var callback = function (err, details) {
+				var getUser = function(err, userName) {
+					var data = {
+						posts: posts,
+						details: details,
+						adminName: userName.name
+					}
+					res.render('topic', data);
+				};
+
+				lib.getUserName(details.userId, getUser);
+			};
+			lib.getTopicDetails(id, callback);
+		}
+	};
+
+	lib.getComments(id, onComplete);
 });
 
 router.post('/postComment/:id', function (req, res) {
 	var post = {
 		comment: req.body.comment,
-		userId: req.session.userId,
+		userId: req.session.name,
 		time: new Date(),
 		topicId: req.params.id
 	};
@@ -128,7 +174,7 @@ router.post('/postComment/:id', function (req, res) {
 	var onComplete = function (error, posts) {
 		error && next();
 		if(posts) {
-			res.render('topic', {id: req.params.id, comments: posts});
+			res.redirect('/topic/'+req.params.id);
 		}
 	};
 
