@@ -107,8 +107,13 @@ var _getTopics = function(userId,db,onComplete){
 };
 
 var _getTopicId = function(topics,db,onComplete){
-	console.log(topics);
 	select(db,onComplete,"topics","get",["max(id)"],{name:topics})
+};
+
+var _insertAction = function(userData,db,onComplete){
+	var fields = ['userId','action','topicId'];
+	var useraction = [userData.userId,userData.action,userData.topicId];
+	insertInto(db, fields, useraction, 'users', onComplete);
 };
 
 var init = function(location){	
@@ -143,7 +148,8 @@ var init = function(location){
 		getUserName: operate(_getUserName),
 		getTopics:operate(_getTopics),
 		getAllTopics:operate(_getAllTopics),
-		getTopicId:operate(_getTopicId)
+		getTopicId:operate(_getTopicId),
+		insertAction:operate(_insertAction)
 	};
 	return records;
 };

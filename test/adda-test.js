@@ -280,4 +280,18 @@ describe('adda_records',function(){
 			});
 		});
 	});
+
+	describe('#insertAction',function(){
+		it('should insert userId 1 topicId 3 and action 1',function(done){
+			var actiondata = {
+				topicId: 3,
+				userId: 1,
+				action: 1
+			};
+			adda_records.insertAction(actiondata,function(err,callback){
+				assert.notOk(err);	
+				done();
+			});
+		});
+	});
 });

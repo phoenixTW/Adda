@@ -44,10 +44,20 @@ router.post('/addtopics',function(req,res){
 	userId = req.session.user_id;
 	userInfo.userId = userId; 
 	userInfo.start_time = new Date();
-	console.log(req.body)
+	
+
 	var getTopicId = function(err,topics){
-		console.log(topics);
-		!err && res.redirect('topic/'+topics["max(id)"]);
+		var onComplete = function (actErr) {
+			!actErr && res.redirect('topic/'+topics["max(id)"]);
+		};
+
+		var data = {
+			topicId: topics["max(id)"],
+			userId: userId,
+			action: 1
+		};
+
+		!err && lib.insertAction(data, onComplete);;
 	};
 
 	var callback = function(error){
