@@ -34,6 +34,36 @@ router.get('/', function(req, res) {
   res.render('index');
 });
 
+router.get('/addtopics', function(req, res) {
+  res.render('addtopics');
+});
+
+router.post('/addtopics',function(req,res){
+	var userInfo = req.body;
+	userInfo.userId = req.session.user_id; 
+	userInfo.start_time = new Date();
+	console.log(userInfo);
+	var callback = function(error){
+		error && res.render('addtopics', {error:error});
+		!error && res.redirect('topic/'+req.session.user_id);	
+	}
+	lib.addTopic(userInfo,callback);
+});
+
+router.post('/searchTopics', function(req, res) {
+	var data = req.body;
+	var callback = function(error,topics){
+		(topics.length==0 || error) && res.render('addtopics',{error1:"Topic not found.."});
+		(!error && topics.length>0) && res.render('addtopics',{name:topics});
+	};
+	if(data.searchText == ''){
+		lib.getAllTopics(callback);
+	}
+	else
+		lib.searchTopics(data.searchText,callback);
+});
+
+
 router.get('/registration',function(req,res){
 	res.render('registration');
 });
@@ -52,7 +82,7 @@ router.post('/login',function(req,res){
 		if(((data===undefined) || error || 
 			(!bcrypt.compareSync(userInfo.password,data.password)))){
 		 	res.render('login', {error:"Invalid Username or Password.."});
-		}
+		};
 		if(!error && (data!==undefined) && 
 			bcrypt.compareSync(userInfo.password,data.password)){
 			req.session.userEmail = userInfo.email_id;
@@ -60,7 +90,7 @@ router.post('/login',function(req,res){
 			req.session.name = data.name;
 			// req.session.userId = password.id;
   			res.redirect('/dashboard');
-		}
+		};
 	};
 
 	lib.getPassword(userInfo.email_id,callback);

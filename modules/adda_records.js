@@ -63,16 +63,15 @@ var _getSingleUser = function(email_id,db,onComplete){
 	var whereToGet = {email_id: email_id};
 	select(db, onComplete, 'registration', 'get', null, whereToGet);
 };
-var _searchTopics = function(startChars,db,onComplete){console.log(startChars,db);
-	var searchTopicsQry = "select name from topics where name like '%"+startChars+"%'";
-	try{
-		db.all(searchTopicsQry,onComplete);
-	}
-	catch(err){
-		throw new err;
-	}
+var _searchTopics = function(startChars,db,onComplete){console.log(startChars);
+	var searchTopicsQry = "select id,name from topics where name like '%"+startChars+"%'";
+	db.all(searchTopicsQry,onComplete);
 }
+var _getAllTopics = function(db,onComplete){
+	searchTopicsQry = "select id,name from topics";
+	db.all(searchTopicsQry,onComplete);
 
+}
 var _getComments = function (topicId, db, onComplete) {
 	var whereToGet = {topic_id: topicId};
 	select(db, onComplete, 'comments', 'all', null, whereToGet);
@@ -101,6 +100,10 @@ var _getTopicDetails = function (topicId, db, onComplete) {
 var _getUserName = function (usrId, db, onComplete) {
 	var whereToGet = {id: usrId};
 	select(db, onComplete, 'registration', 'get', ['name'], whereToGet);
+};
+
+var _getTopics = function(userId,db,onComplete){
+	select(db,onComplete,"topics",'all',["name"],{userId:userId});
 };
 
 var init = function(location){	
@@ -132,10 +135,13 @@ var init = function(location){
 		getComments: operate(_getComments),
 		getTopicId: operate(_getTopicId),
 		getTopicDetails: operate(_getTopicDetails),
-		getUserName: operate(_getUserName)
+		getUserName: operate(_getUserName),
+		getTopics:operate(_getTopics),
+		getAllTopics:operate(_getAllTopics)
 	};
 	return records;
 };
+
 exports.init = init;
 
 exports.queryParser = {

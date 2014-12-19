@@ -35,15 +35,15 @@ describe('adda_records',function(){
 		it('insert "nice game" by Kaustav Chakraborty into comments table',function(done){
 			var post = {
 				comment: 'nice game',
-				userId: '1',
-				topicId: '1',
+				userId: 1,
+				topicId: 1,
 				time: '02/03/2014'
 			};
 
 			var expectedComment = [
-				{ 	topic_id: '1',
+				{ 	topic_id: "1",
 					comment: 'nice game',
-					userId: '1',
+					userId: "1",
 					time: '02/03/2014'
 				}
 			];
@@ -157,10 +157,9 @@ describe('adda_records',function(){
 
 	describe('#searchTopics',function(){
 		it('should give all topics started with step',function(done){
-			var expected_topics = [{name:'step'},{name:'step of success'}]
+			var expected_topics = [{id:1,name:'step'},{id:2,name:'step of success'}]
 			
 			adda_records.searchTopics('ste', function(err,topics){
-				console.log("aaaaaaaaaaaaaaaaa",topics)
 				assert.notOk(err);
 				assert.deepEqual(expected_topics, topics);
 				done();
@@ -241,4 +240,27 @@ describe('adda_records',function(){
 		});
 
 	});	
+
+	describe('#getAllTopics',function(){
+		it('should give all topics',function(done){
+			var expected_topics = [{id:1,name:'step'},{id:2,name:'step of success'},{id:3,name:'soda'},{id:4,name:'hocky'}]
+			adda_records.getAllTopics(function(err,topics){
+				assert.notOk(err);
+				assert.deepEqual(expected_topics,topics);
+				done();
+			});
+		});
+	});
+
+	describe('#getTopics',function(){
+		it('should give 1st politics then hocky',function(done){
+			var userId = 1;
+			var expected_topics = [{"name":"step"},{"name":"soda"},{"name":"hocky"}];
+			adda_records.getTopics(userId,function(err,topic){
+				assert.notOk(err);
+				assert.deepEqual(topic,expected_topics);
+				done();
+			});
+		});
+	});
 });
