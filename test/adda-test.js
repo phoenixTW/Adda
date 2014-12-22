@@ -86,7 +86,7 @@ describe('adda_records',function(){
 		it('should give error for wrong@gmail.com',function(done){
 			var email_id = "wrong@gmail.com";
 			adda_records.getPassword(email_id, function(err,password){
-				assert.notOk(err);
+				assert.ok(err);
 				done();
 			});
 		});
