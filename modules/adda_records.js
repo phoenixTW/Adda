@@ -107,13 +107,18 @@ var _getTopics = function(userId,db,onComplete){
 };
 
 var _getTopicId = function(topics,db,onComplete){
-	console.log(topics);
 	select(db,onComplete,"topics","get",["max(id)"],{name:topics})
 };
 
 var _top5ActiveTopics = function(db,onComplete){
 	var top5Query = "select distinct id,name,description from topics order by id desc LIMIT 5";
 	db.all(top5Query,onComplete);
+};
+
+var _insertAction = function(userData,db,onComplete){
+	var fields = ['userId','action','topicId'];
+	var useraction = [userData.userId,userData.action,userData.topicId];
+	insertInto(db, fields, useraction, 'users', onComplete);
 };
 
 var init = function(location){	
@@ -149,7 +154,8 @@ var init = function(location){
 		getTopics:operate(_getTopics),
 		getAllTopics:operate(_getAllTopics),
 		getTopicId:operate(_getTopicId),
-		top5ActiveTopics:operate(_top5ActiveTopics)
+		top5ActiveTopics:operate(_top5ActiveTopics),
+		insertAction:operate(_insertAction)
 	};
 	return records;
 };

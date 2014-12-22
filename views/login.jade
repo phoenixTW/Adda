@@ -3,16 +3,21 @@ block vars
  - var title = "Login"
 
 block content
+ a(href="/") Home
+ hr
+ center
   h1 Login your account
   if error
    p ERROR: #{error}
   form(action="/login" method="POST")
    span 
-    |Email:
+    |Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     input(type="email" name="email_id" required)
+   br
    br
    span 
     |Password:
     input(type="password" name="password" required)
+   br
    br
    input(type="submit" value="Login")

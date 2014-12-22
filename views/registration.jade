@@ -3,20 +3,26 @@ block vars
  - var title = "Register"
 
 block content
+ a(href="/") Home
+ hr
+ center
   h1 Register your account
   if error
    p ERROR: #{error}
   form(action="/registration" method="POST")
    span 
-    |Name:
+    |Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     input(type="text" name="name" required)
    br
+   br
    span 
-    |Email:
+    |Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     input(type="email" name="email_id" required)
+   br
    br
    span 
     |Password:
     input(type="password" name="password" required)
+   br
    br
    input(type="submit" value="Register")
