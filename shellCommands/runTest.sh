@@ -8,9 +8,10 @@ if [ $a == 0 ]
 		echo "success"
 	else
 		rm -rf error
+		git --no-pager show -s --format='%an <%ae>'| cut -c10-15
 		for (( ; ; ))
 		do
-			echo -e "\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a\a"
+			C:/Program\ Files\ \(x86\)/VideoLAN/VLC/vlc.exe "tune/alert.mp3" vlc://quit
 		done	
 fi
 

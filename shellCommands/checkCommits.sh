@@ -1,6 +1,6 @@
 while [[ true ]]; 
 do
-	sleep 1m
+	sleep 2m
 	a=`git ls-remote https://github.com/phoenixTW/Adda.git HEAD | cut -c1-40`
 	b=`git rev-parse HEAD`
 	if [ "$a" != "$b" ]
