@@ -19,7 +19,7 @@ describe('adda_records',function(){
 			};
 
 			var callback = function(error,userInfo){
-				assert.notOk(error);
+				assert.ok(error);
 				user.id = 3;
 				assert.deepEqual(userInfo[2], user);
 				done();
