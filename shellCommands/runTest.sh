@@ -9,10 +9,10 @@ if [ $a == 0 ]
 	else
 		rm -rf error
 		git --no-pager show -s --format='%an <%ae>'| cut -c10-15
-		for (( ; ; ))
-		do
+		# for (( ; ; ))
+		# do
 			C:/Program\ Files\ \(x86\)/VideoLAN/VLC/vlc.exe "tune/alert.mp3" vlc://quit
-		done	
+		# done	
 fi
 
 rm -rf error
