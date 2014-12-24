@@ -21,14 +21,14 @@ block content
     if end
      | close-time : #{details.end_time}
    h4 description: #{details.description}
-   if flag == null && !details.end_time
+   if flag == null && !end
     input(type = "submit" id = "join" value = "join" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action})")
    if flag == 1 && !details.end_time
     input(type = "submit" id = "close" value = "close" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action})")
    if flag == 2 && !details.end_time
     input(type = "submit" id = "leave" value = "leave" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action})")
    if flag == 0 || details.end_time
-    h4 closed   
+    h4 closed
   div(class = "commentHolder" id = "commentHolder")
    input(type = "submit" id = "load" class = "load-button" value = "load complete")
    div(id = "comment" class = "comment")
@@ -39,7 +39,9 @@ block content
        p Date: #{post.time}
        p Comment: #{post.comment}
        <hr></hr>
-   if !details.end_time || flag == 2 || flag == 1
+   if flag == null && !end
+    h3 need to join the topic
+   else if flag == 2 || flag == 1 || !end
     form(action = "/postComment/#{posts.id}" method = "POST")
      span
       input(type = "text" class = "inputBox" name ="comment" placeholder = "My current comment............")
