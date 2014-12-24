@@ -5,6 +5,8 @@ do
 	b=`git rev-parse HEAD`
 	if [ "$a" != "$b" ]
 		then
+			echo $a
+			echo $b
 			echo -e '/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a Need to update'
 			sh shellCommands/pullCommit.sh
 		else
