@@ -164,12 +164,27 @@ router.get('/topic/:id',requireLogin, function (req, res) {
 			posts.id = id;
 			var callback = function (err, details) {
 				var getUser = function(err, userName) {
-					var data = {
-						posts: posts.reverse(),
-						details: details,
-						adminName: userName.name
-					}
-					res.render('topic', data);
+					var getActionDetails = function (actErr, actionDes) {
+						actionDes = actionDes || {
+							userId: req.session.user_id,
+							topicId: id,
+							action: null
+						};
+						var data = {
+							posts: posts.reverse(),
+							details: details,
+							adminName: userName.name,
+							action: actionDes
+						};
+						res.render('topic', data);
+					};
+
+					var ids = {
+						topicId: id,
+						userId: req.session.user_id
+					};
+
+					lib.getAction(ids, getActionDetails);
 				};
 
 				lib.getUserName(details.userId, getUser);
@@ -200,6 +215,45 @@ router.post('/postComment/:id', function (req, res) {
 		lib.getComments(post.topicId, onComplete);
 	}
 	lib.postComment(post, callback);
+});
+
+router.post('/setAction', function (req, res) {
+	var actionDes = {
+		topicId: req.body['actionDes[topicId]'],
+		userId: req.body['actionDes[userId]'],
+		action: req.body['actionDes[action]']
+	};
+
+	if(actionDes.action == null || actionDes.action == '')
+		actionDes.action = 2;
+	else if(actionDes.action == 2){
+		actionDes.action = null;
+	}
+	
+	else if(actionDes.action == 1){
+		actionDes.action = 0;
+		var updateTopicData = {
+			id: actionDes.topicId,
+			endTime: new Date()
+		}
+		lib.updateTopics(updateTopicData, updateTopicCallback);
+	}
+
+	var updateTopicCallback = function (topicErr) {
+		return null;
+	};
+
+	var onComplete = function (error) {
+		res.redirect('/topic/' + actionDes.topicId);
+	};
+
+
+	var callback = function (err) {
+		err && lib.insertAction(actionDes, callback);
+		!err && res.redirect('/topic/' + actionDes.topicId);
+	};
+
+	lib.updateAction(actionDes, callback);	
 });
 
 module.exports = router;
