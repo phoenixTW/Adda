@@ -69,7 +69,7 @@ router.post('/addtopics',function(req,res){
 	lib.addTopic(userInfo,callback);
 });
 
-router.post('/searchTopics', function(req, res) {
+router.post('/startNewTopic', function(req, res) {
 	var data = req.body;
 	var callback = function(error,topics){
 		(topics.length==0 || error) && res.render('addtopics',{error1:"Topic not found.."});
