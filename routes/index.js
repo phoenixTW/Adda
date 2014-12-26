@@ -251,6 +251,7 @@ router.post('/setAction', function (req, res) {
 
 
 	var callback = function (err) {
+		console.log(actionDes);
 		if(err)
 			lib.insertAction(actionDes, callback);
 		else
