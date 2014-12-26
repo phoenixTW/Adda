@@ -42,4 +42,4 @@ var runServer = function(){
 		(i%50==0) && server();
 	}
 }
-runserver();
+runServer();
