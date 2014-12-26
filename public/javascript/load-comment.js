@@ -18,7 +18,7 @@ $(document).ready(function(){
 var comment;
 var onPost = function (id) {
 	comment = $("#comment").html();
-	var msg = $("#msg").val().replace(/""/g,'\"');
+	var msg = $("#msg").val();
 	$('#msg').val('');	
 	$.post('/postComment/' + id, {msg: msg}).done(onPostDone).error(function(err){
 
