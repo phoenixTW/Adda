@@ -21,6 +21,7 @@ var onPost = function (id) {
 	var msg = $("#msg").val();
 	$('#msg').val('');	
 	$.post('/postComment/' + id, {msg: msg}).done(onPostDone).error(function(err){
+
 		$('#comment').html(err.responseText);		
 	});
 };
