@@ -1,5 +1,9 @@
-div
- p Name : #{post.userId}
- p Date: #{post.time}
- p Comment: #{post.comment}
- <hr></hr>
+if error
+ div
+  p #{error}
+else
+ div
+  p Name : #{post.userId}
+  p Date: #{post.time}
+  p Comment: #{post.comment}
+  <hr></hr>	

@@ -133,11 +133,11 @@ router.post('/registration',function(req,res){
 	lib.insertUsers(userInfo,callback);
 });
 
-router.get('/addtopics',function(req,res){
+router.get('/addtopics', requireLogin, function(req,res){
 	res.render('addtopics');
 });
 
-router.post('/addtopics',function(req,res){
+router.post('/addtopics', requireLogin, function(req,res){
 	var userInfo = req.body;
 	userInfo.userId = req.session.user_id; 
 	userInfo.start_time = new Date();
@@ -196,7 +196,7 @@ router.get('/topic/:id',requireLogin, function (req, res) {
 	lib.getComments(id, onComplete);
 });
 
-router.post('/postComment/:id', function (req, res) {
+router.post('/postComment/:id', requireLogin, function (req, res) {
 	var post = {
 		comment: req.body.msg,
 		userId: req.session.name,
@@ -207,13 +207,14 @@ router.post('/postComment/:id', function (req, res) {
 	var onComplete = function (error, posts) {
 		error && next();
 		if(posts) {
-			post = posts.reverse()[0];
-			res.render('showComments', {post: post});
+			recentPost = posts.reverse()[0];
+			res.render('showComments', {post: recentPost});
 		}
 	};
 
 	var callback = function (err) {
-		lib.getComments(post.topicId, onComplete);
+		err && res.render('showComments', {error: 'Error: Don`t use double quote'});		
+		!err && lib.getComments(post.topicId, onComplete);
 	}
 	lib.postComment(post, callback);
 });

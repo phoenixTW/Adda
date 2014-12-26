@@ -18,9 +18,10 @@ $(document).ready(function(){
 var comment;
 var onPost = function (id) {
 	comment = $("#comment").html();
-	var msg = $("#msg").val();
+	var msg = $("#msg").val().replace(/""/g,'\"');
 	$('#msg').val('');	
 	$.post('/postComment/' + id, {msg: msg}).done(onPostDone).error(function(err){
+
 		$('#comment').html(err.responseText);		
 	});
 };
