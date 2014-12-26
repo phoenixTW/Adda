@@ -306,4 +306,53 @@ describe('adda_records',function(){
 			});
 		});
 	});
+
+	describe('#updateAction',function(){
+		it('should update action 1 for userId 1 topicId 3 to action 0',function(done){
+			var actiondata = {
+				topicId: 3,
+				userId: 1,
+				action: 1
+			};
+
+			var updatedData = {
+				topicId: 3,
+				userId: 1,
+				action: 0
+			};
+
+			adda_records.insertAction(actiondata,function(err,callback){
+				assert.notOk(err);
+				adda_records.updateAction(actiondata, function (error) {
+					assert.notOk(error);
+					done();
+				});
+			});
+		});
+	});
+
+	describe('#updateTopics',function(){
+		it('insert new topic into topics table along with userId and time',function(done){
+			var topic =  {
+				id: 2,
+				name: 'step of success',
+				description: 'nobel thought',
+				userId: 2,
+				start_time: 'GMT 5:30',
+				end_time: 'GMT 17:30'
+			};
+
+			var callback = function(error,topicInfo){
+				assert.notOk(error);
+				assert.deepEqual(topic, topicInfo);
+				done();
+			};
+
+			adda_records.updateTopics({id: topic.id, endTime: topic.end_time}, function(err){
+				assert.notOk(err);
+				adda_records.getTopicDetails(topic.id,callback);
+			});
+		});
+	});
+
 });

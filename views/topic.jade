@@ -1,9 +1,11 @@
 extends layout
 block vars
  - var title = "Adda-Topic"
- - var flag = 1
+ - var flag = action.action
+ - var end = details.end_time
 block headcontent
  script(type= "text/javascript" src= "/javascript/load-comment.js")
+ script(type= "text/javascript" src= "/javascript/userActions.js")
 block content
  h1 WELCOME TO TOPIC
  h2 TOPIC : #{details.name}
@@ -16,14 +18,17 @@ block content
    span
     | name: #{adminName} &nbsp;&nbsp;&nbsp;
     | start-time: #{details.start_time} &nbsp;&nbsp;&nbsp;
-    | close-time : #{details.end_time}
+    if end
+     | close-time : #{details.end_time}
    h4 description: #{details.description}
-   if flag == 1
-    input(type = "submit" id = "action" value = "close")
-   if flag == 2
-    input(type = "submit" id = "action" value = "leave")
-   if flag == null
-    input(type = "submit" id = "action" value = "join")
+   if flag == null && !end
+    input(type = "submit" id = "join" value = "join" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action})")
+   if flag == 1 && !details.end_time
+    input(type = "submit" id = "close" value = "close" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action})")
+   if flag == 2 && !details.end_time
+    input(type = "submit" id = "leave" value = "leave" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action})")
+   if flag == 0 || details.end_time
+    h4 closed
   div(class = "commentHolder" id = "commentHolder")
    input(type = "submit" id = "load" class = "load-button" value = "load complete")
    div(id = "comment" class = "comment")
@@ -34,9 +39,10 @@ block content
        p Date: #{post.time}
        p Comment: #{post.comment}
        <hr></hr>
-
-   form(action = "/postComment/#{posts.id}" method = "POST")
-    span
-     input(type = "text" class = "inputBox" name ="comment" placeholder = "My current comment............")
-     input(type = "submit" id = "post" class = "post" value = "submit")
-  
+   if flag == null && !end
+    h3 need to join the topic
+   else if flag == 2 || flag == 1 || !end
+    form(action = "/postComment/#{posts.id}" method = "POST")
+     span
+      input(type = "text" class = "inputBox" name ="comment" placeholder = "My current comment............")
+      input(type = "submit" id = "post" class = "post" value = "submit")

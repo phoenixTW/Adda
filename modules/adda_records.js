@@ -121,6 +121,27 @@ var _insertAction = function(userData,db,onComplete){
 	insertInto(db, fields, useraction, 'users', onComplete);
 };
 
+var _updateAction = function(userData,db,onComplete){
+	var query = 'update users set action = ' + 	
+		userData.action + " where userId = " + userData.userId + " and topicId = " + userData.topicId;
+	db.run(query, onComplete); 
+};
+
+var _updateTopics = function(info,db,onComplete){
+	var query = 'update topics set end_time = "' + info.endTime + '" where id = ' + info.id + ';';
+	db.run(query, onComplete); 
+};
+
+var _getAction = function (ids, db, onComplete) {
+	var whereToGet = {
+		topicId: ids.topicId,
+		userId: ids.userId
+	};
+
+	select(db, onComplete, "users", "get", null, whereToGet);
+};
+
+
 var init = function(location){	
 	var operate = function(operation){
 		return function(){
@@ -152,10 +173,13 @@ var init = function(location){
 		getTopicDetails: operate(_getTopicDetails),
 		getUserName: operate(_getUserName),
 		getTopics:operate(_getTopics),
+		getAction: operate(_getAction),
 		getAllTopics:operate(_getAllTopics),
 		getTopicId:operate(_getTopicId),
 		top5ActiveTopics:operate(_top5ActiveTopics),
-		insertAction:operate(_insertAction)
+		insertAction:operate(_insertAction),
+		updateAction:operate(_updateAction),
+		updateTopics: operate(_updateTopics)
 	};
 	return records;
 };

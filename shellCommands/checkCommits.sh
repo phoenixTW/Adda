@@ -1,6 +1,5 @@
 while [[ true ]]; 
 do
-	sleep 1m
 	a=`git ls-remote https://github.com/phoenixTW/Adda.git HEAD | cut -c1-40`
 	b=`git rev-parse HEAD`
 	if [ "$a" != "$b" ]
@@ -12,4 +11,5 @@ do
 		else
 			echo "No Update Available"
 	fi
+	sleep 2m
 done
