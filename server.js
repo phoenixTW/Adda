@@ -9,15 +9,21 @@ var sound = function(){
 
 var runTest = function(){
 	exec('npm run test',function(te_err, std__out, std__err){
-		(std__err) && sound();
 		(!std__err) && console.log("update successfull");
+		if(std__err){
+			exec("git --no-pager show -s --format='%an <%ae>'| cut -c10-15",function(er,st_out,st_err){
+				console.log(st_out);
+				sound();
+			})
+			
+		}
 	})
 }
 
 var pullcommit = function(){
 	exec('git pull',function(te_err, std__out, std__err){
 		console.log(std__err);
-		// runTest();
+		runTest();
 	})
 };
 
@@ -31,4 +37,9 @@ var server = function(){
 	});
 };
 
-server();
+var runServer = function(){
+	for(var i=0; ; i++){
+		(i%50==0) && server();
+	}
+}
+runserver();
