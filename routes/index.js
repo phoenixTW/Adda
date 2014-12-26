@@ -88,8 +88,8 @@ router.get('/registration',function(req,res){
 });
 
 router.get('/dashboard',requireLogin, function(req,res){
-	lib.getTopics(req.session.user_id,function(err,topics){
-		var topics = topics.reverse();
+	lib.getMyTopics(req.session.user_id,function(err,topics){
+		//console.log("&&&&&&&&&&&&&&&",topics)
 		err && req.render('dashboard',{error:err})
 		!err && res.render('dashboard',{topics:topics});
 	})

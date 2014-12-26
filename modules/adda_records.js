@@ -141,6 +141,23 @@ var _getAction = function (ids, db, onComplete) {
 	select(db, onComplete, "users", "get", null, whereToGet);
 };
 
+var _getMyTopics = function(userId, db ,onComplete){
+	var query1 = "select topics.id,topics.name from topics where topics.userId="+userId;
+	var query2 = "select distinct topics.id,topics.name from topics "+
+		"inner join joinedTopics  on topics.id=joinedTopics.topic_id"+
+		" where joinedTopics.userId="+userId;
+	db.all(query1,function(err,createdTopics){
+		if(!err){
+			db.all(query2,function(err,joinedTopics){
+			 onComplete(null,createdTopics.concat(joinedTopics));
+			});
+		}
+		else
+			onComplete(err);
+	});
+
+}
+
 
 var init = function(location){	
 	var operate = function(operation){
@@ -179,7 +196,8 @@ var init = function(location){
 		top5ActiveTopics:operate(_top5ActiveTopics),
 		insertAction:operate(_insertAction),
 		updateAction:operate(_updateAction),
-		updateTopics: operate(_updateTopics)
+		updateTopics: operate(_updateTopics),
+		getMyTopics:operate(_getMyTopics)
 	};
 	return records;
 };
