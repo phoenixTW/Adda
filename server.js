@@ -2,21 +2,15 @@ var exec = require('child_process').exec;
 
 
 var sound = function(){
-	exec("vlc  sound/alert.mp3",function(te_err, std__out, std__err){
-		console.log(std__err);
+	exec("vlc  sound/alert.mp3 vlc://quit",function(te_err, std__out, std__err){
 	});
 };
 
 var runTest = function(){
 	exec('npm run test',function(te_err, std__out, std__err){
 		(!std__err) && console.log("update successfull");
-		if(std__err){
-			exec("git --no-pager show -s --format='%an <%ae>'| cut -c10-15",function(er,st_out,st_err){
-				console.log(st_out);
-				sound();
-			})
-			
-		}
+		(std__err) && sound();
+		
 	})
 }
 
@@ -26,6 +20,7 @@ var pullcommit = function(){
 		console.log(std__out);
 		runTest();
 	})
+	runTest();
 };
 
 var server = function(){
