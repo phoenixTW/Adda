@@ -36,6 +36,8 @@ a {
 }
 
 .logout{
+	display: block;
+	float: right;
 	margin-right: 30px;
-	color: blue;
+	color: blue	;
 }
