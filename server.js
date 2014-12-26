@@ -23,11 +23,13 @@ var runTest = function(){
 var pullcommit = function(){
 	exec('git pull',function(te_err, std__out, std__err){
 		console.log(std__err);
+		console.log(std__out);
 		runTest();
 	})
 };
 
 var server = function(){
+	console.log("CI-server is running.");
 	exec('git ls-remote https://github.com/phoenixTW/Adda.git HEAD | cut -c1-40',
 		function(err, stdout, stderr){
 			exec('git rev-parse HEAD',function(error, std_out, std_err){
@@ -37,9 +39,4 @@ var server = function(){
 	});
 };
 
-var runServer = function(){
-	for(var i=0; ; i++){
-		(i%50==0) && server();
-	}
-}
-runServer();
+server();
