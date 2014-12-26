@@ -79,7 +79,7 @@ router.post('/startNewTopic', function(req, res) {
 		lib.getAllTopics(callback);
 	}
 	else
-		lib.searchTopics(data.searchText,callback);
+		lib.startNewTopic(data.searchText,callback);
 });
 
 
