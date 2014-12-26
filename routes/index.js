@@ -171,7 +171,7 @@ router.get('/topic/:id',requireLogin, function (req, res) {
 							action: null
 						};
 						var data = {
-							posts: posts.reverse(),
+							posts: posts,
 							details: details,
 							adminName: userName.name,
 							action: actionDes
@@ -198,7 +198,7 @@ router.get('/topic/:id',requireLogin, function (req, res) {
 
 router.post('/postComment/:id', function (req, res) {
 	var post = {
-		comment: req.body.comment,
+		comment: req.body.msg,
 		userId: req.session.name,
 		time: new Date(),
 		topicId: req.params.id
@@ -207,7 +207,8 @@ router.post('/postComment/:id', function (req, res) {
 	var onComplete = function (error, posts) {
 		error && next();
 		if(posts) {
-			res.redirect('/topic/'+req.params.id);
+			post = posts.reverse()[0];
+			res.render('showComments', {post: post});
 		}
 	};
 
@@ -249,8 +250,10 @@ router.post('/setAction', function (req, res) {
 
 
 	var callback = function (err) {
-		err && lib.insertAction(actionDes, callback);
-		!err && res.redirect('/topic/' + actionDes.topicId);
+		if(err)
+			lib.insertAction(actionDes, callback);
+		else
+			res.redirect('/topic/' + actionDes.topicId);
 	};
 
 	lib.updateAction(actionDes, callback);	

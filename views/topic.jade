@@ -22,11 +22,17 @@ block content
      | close-time : #{details.end_time}
    h4 description: #{details.description}
    if flag == null && !end
-    input(type = "submit" id = "join" value = "join" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action})")
+    span
+     h3 click to &nbsp;
+      input(type = "submit" id = "join" value = "join" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action})")
    if flag == 1 && !details.end_time
-    input(type = "submit" id = "close" value = "close" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action})")
+    span
+     h3 click to &nbsp;
+      input(type = "submit" id = "close" value = "close" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action})")
    if flag == 2 && !details.end_time
-    input(type = "submit" id = "leave" value = "leave" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action})")
+    span
+     h3 click to &nbsp;
+      input(type = "submit" id = "leave" value = "leave" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action})")
    if flag == 0 || details.end_time
     h4 closed
   div(class = "commentHolder" id = "commentHolder")
@@ -42,7 +48,7 @@ block content
    if flag == null && !end
     h3 need to join the topic
    else if flag == 2 || flag == 1 || !end
-    form(action = "/postComment/#{posts.id}" method = "POST")
+    div(id="comments")
      span
-      input(type = "text" class = "inputBox" name ="comment" placeholder = "My current comment............")
-      input(type = "submit" id = "post" class = "post" value = "submit")
+      input(type = "text" id = "msg" class = "inputBox" name ="comment" placeholder = "My current comment............")
+      input(type = "submit" id = "post" class = "post" value = "submit" onclick = "onPost(#{posts.id})")
