@@ -5,7 +5,7 @@ block vars
 block content
   a(href="/dashboard") Dashboard
   center
-   h1 Start New Topics
+   h1 Add New Topic
    if error
     p ERROR: #{error}
    form(action="/addTopics" method="POST")
@@ -21,7 +21,7 @@ block content
      input(type="submit" value="Submit")
    br
    hr
-   h1 Select your topics here
+   h1 Search your topic here
    div
     form(action="/startNewTopic", method="POST")
      span

@@ -3,6 +3,7 @@ block vars
  - var title = "Adda-Topic"
  - var flag = action.action
  - var end = details.end_time
+  a(href="/dashboard") dashboard
 block headcontent
  script(type= "text/javascript" src= "/javascript/load-comment.js")
  script(type= "text/javascript" src= "/javascript/userActions.js")
@@ -10,9 +11,6 @@ block content
  h1 WELCOME TO TOPIC
  h2 TOPIC : #{details.name}
  p 
-  a(href="/dashboard") dashboard
-  |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  a(href="/logout") logout
  div
   h3
    span
