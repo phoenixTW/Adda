@@ -7,12 +7,17 @@ a {
   color: #00B7FF;
 }
 
+b{
+	font-size: 20px;
+}
+
 .comment {
 	height: 400px;
 	border: 1px;
 	width: 900px;
 	margin-top: 4px;
-	overflow: scroll;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 .load-button {
