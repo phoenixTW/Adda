@@ -14,7 +14,6 @@ var loadUserFromSession = function(req,res,next){
 				name: user.name,
 				email_id: user.email_id
 			};
-
 			req.user = userInfo;
 			res.locals.user = userInfo;
 		}else{
@@ -40,6 +39,38 @@ router.get('/addtopics',requireLogin, function(req, res) {
   res.render('addtopics');
 });
 
+router.get('/registration',function(req,res){
+	res.render('registration');
+});
+
+router.get('/login',function(req,res){
+	res.render('login');
+});
+
+router.get('/logout',function(req,res){
+	req.session.destroy();
+	res.redirect('/login');
+});
+
+router.get('/addtopics', requireLogin, function(req,res){
+	res.render('addtopics');
+});
+
+router.post('/leave', function (req, res) {
+	var requestData = req.body;
+	var callback = function (error) {
+		!error && res.redirect('/topic/' + requestData.topicId)
+	};
+	lib.deleteAction(requestData, callback);
+});
+
+router.get('/dashboard',requireLogin, function(req,res){
+	lib.getTopics(req.session.user_id,function(err,topics){
+		var topics = topics.reverse();
+		err && req.render('dashboard',{error:err})
+		!err && res.render('dashboard',{topics:topics});
+	})
+});
 
 router.post('/addtopics',function(req,res){
 	var userInfo = req.body;
@@ -47,7 +78,6 @@ router.post('/addtopics',function(req,res){
 	userInfo.userId = userId; 
 	userInfo.start_time = new Date();
 	
-
 	var getTopicId = function(err,topics){
 		var onComplete = function (actErr) {
 			!actErr && res.redirect('topic/'+topics["max(id)"]);
@@ -83,21 +113,8 @@ router.post('/startNewTopic', function(req, res) {
 });
 
 
-router.get('/registration',function(req,res){
-	res.render('registration');
-});
 
-router.get('/dashboard',requireLogin, function(req,res){
-	lib.getTopics(req.session.user_id,function(err,topics){
-		var topics = topics.reverse();
-		err && req.render('dashboard',{error:err})
-		!err && res.render('dashboard',{topics:topics});
-	})
-});
 
-router.get('/login',function(req,res){
-	res.render('login');
-});
 
 router.post('/login',function(req,res){
 	var userInfo = req.body;
@@ -118,10 +135,6 @@ router.post('/login',function(req,res){
 	lib.getPassword(userInfo.email_id,callback);
 });
 
-router.get('/logout',function(req,res){
-	req.session.destroy();
-	res.redirect('/login');
-});
 
 router.post('/registration',function(req,res){
 	var userInfo = req.body;
@@ -133,9 +146,6 @@ router.post('/registration',function(req,res){
 	lib.insertUsers(userInfo,callback);
 });
 
-router.get('/addtopics', requireLogin, function(req,res){
-	res.render('addtopics');
-});
 
 router.post('/addtopics', requireLogin, function(req,res){
 	var userInfo = req.body;
@@ -240,16 +250,6 @@ router.post('/join', function (req, res) {
 	lib.insertAction(requestData, callback);
 });
 
-router.post('/leave', function (req, res) {
-	var requestData = req.body;
-
-	var callback = function (error) {
-		!error && res.redirect('/topic/' + requestData.topicId)
-	};
-
-	lib.deleteAction(requestData, callback);
-});
-
 router.post('/close', function (req, res) {
 	var requestData = req.body;
 	requestData.action = 0;
@@ -259,9 +259,7 @@ router.post('/close', function (req, res) {
 		endTime: new Date()
 	};
 
-
 	var onComplete = function (error) {
-
 		lib.updateAction(requestData, callback);
 	};
 
