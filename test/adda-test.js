@@ -354,7 +354,6 @@ describe('adda_records',function(){
 			});
 		});
 	});
-
 	describe('#getMyTopics',function(){
 		it('getMyTopics get all created and joined topics of particular user',function(done){
 			var expected = [ { id: 2, name: 'step of success' },
@@ -364,8 +363,7 @@ describe('adda_records',function(){
 				assert.notOk(err);
 				assert.deepEqual(topics,expected);
 				done();
-			})
-		})
-	})
-
+			});
+		});
+	});
 });
