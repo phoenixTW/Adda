@@ -1,10 +1,14 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+b{
+	font-size: 20px;
 }
 
 .comment {
@@ -12,12 +16,13 @@ a {
 	border: 1px;
 	width: 900px;
 	margin-top: 4px;
-	overflow: scroll;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 .load-button {
 	height: 5%;
-	width: 100%;
+	width: 20%;
 }
 
 .commentHolder {

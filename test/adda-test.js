@@ -154,10 +154,10 @@ describe('adda_records',function(){
 		});
 	});
 
-	describe('#startNewTopic',function(){
+	describe('#searchTopics',function(){
 		it('should give all topics started with step',function(done){
 			var expected_topics = [{id:1,name:'step'},{id:2,name:'step of success'}];
-			adda_records.startNewTopic('ste', function(err,topics){
+			adda_records.searchTopics('ste', function(err,topics){
 				assert.notOk(err);
 				assert.deepEqual(expected_topics, topics);
 				done();

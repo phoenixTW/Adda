@@ -64,8 +64,8 @@ var _getSingleUser = function(email_id,db,onComplete){
 	select(db, onComplete, 'registration', 'get', null, whereToGet);
 };
 
-var _startNewTopic = function(startChars,db,onComplete){	
-	var searchTopicsQry = "select id,name from topics where name like '%"+startChars+"%'";
+var _searchTopics = function(startChars,db,onComplete){
+	var searchTopicsQry = "select id,name from topics where name like '%" + startChars + "%'";
 	db.all(searchTopicsQry,onComplete);
 };
 
@@ -110,7 +110,7 @@ var _getTopics = function(userId,db,onComplete){
 };
 
 var _getTopicId = function(topics,db,onComplete){
-	select(db,onComplete,"topics","get",["max(id)"],{name:topics})
+	select(db,onComplete,"topics","get",["max(id) as id"],{name:topics})
 };
 
 var _top5ActiveTopics = function(db,onComplete){
@@ -203,7 +203,7 @@ var init = function(location){
 		getSingleUser:operate(_getSingleUser),
 		addTopic:operate(_addTopic),
 		getTopicInfo:operate(_getTopicInfo),
-		startNewTopic:operate(_startNewTopic),
+		searchTopics:operate(_searchTopics),
 		postComment: operate(_postComment),
 		getComments: operate(_getComments),
 		getTopicId: operate(_getTopicId),

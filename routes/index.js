@@ -1,5 +1,7 @@
 var express = require('express');
 var lib = require('../modules/adda_records').init("data/adda.db");
+var add = require('../modules/addTopics');
+var topic = require('../modules/topic');
 var router = express.Router();
 var bcrypt = require("bcryptjs");
 // var salt = bcrypt.genSaltSync(10);
@@ -14,7 +16,6 @@ var loadUserFromSession = function(req,res,next){
 				name: user.name,
 				email_id: user.email_id
 			};
-
 			req.user = userInfo;
 			res.locals.user = userInfo;
 		}else{
@@ -36,52 +37,18 @@ router.get('/', function(req, res) {
 	})
 });
 
+router.get('/login',function(req,res){
+	res.render('login');
+});
+
+router.get('/logout',function(req,res){
+	req.session.destroy();
+	res.redirect('/login');
+});
+
 router.get('/addtopics',requireLogin, function(req, res) {
   res.render('addtopics');
 });
-
-
-router.post('/addtopics',function(req,res){
-	var userInfo = req.body;
-	userId = req.session.user_id;
-	userInfo.userId = userId; 
-	userInfo.start_time = new Date();
-	
-
-	var getTopicId = function(err,topics){
-		var onComplete = function (actErr) {
-			!actErr && res.redirect('topic/'+topics["max(id)"]);
-		};
-
-		var data = {
-			topicId: topics["max(id)"],
-			userId: userId,
-			action: 1
-		};
-
-		!err && lib.insertAction(data, onComplete);;
-	};
-
-	var callback = function(error){
-		error && res.render('addtopics', {error:error});
-		!error && lib.getTopicId(req.body.name,getTopicId)	
-	}
-	lib.addTopic(userInfo,callback);
-});
-
-router.post('/startNewTopic', function(req, res) {
-	var data = req.body;
-	var callback = function(error,topics){
-		(topics.length==0 || error) && res.render('addtopics',{error1:"Topic not found.."});
-		(!error && topics.length>0) && res.render('addtopics',{name:topics});
-	};
-	if(data.searchText == ''){
-		lib.getAllTopics(callback);
-	}
-	else
-		lib.startNewTopic(data.searchText,callback);
-});
-
 
 router.get('/registration',function(req,res){
 	res.render('registration');
@@ -117,10 +84,6 @@ router.post('/login',function(req,res){
 	lib.getPassword(userInfo.email_id,callback);
 });
 
-router.get('/logout',function(req,res){
-	req.session.destroy();
-	res.redirect('/login');
-});
 
 router.post('/registration',function(req,res){
 	var userInfo = req.body;
@@ -239,27 +202,26 @@ router.post('/leave', function (req, res) {
 	lib.deleteAction(requestData, callback);
 });
 
-router.post('/close', function (req, res) {
-	var requestData = req.body;
-	requestData.action = 0;
-
-	var updateTopicData = {
-		id: requestData.topicId,
-		endTime: new Date()
-	};
-
-
-	var onComplete = function (error) {
-
-		lib.updateAction(requestData, callback);
-	};
-
-	var callback = function (error) {
-		!error && res.redirect('/topic/' + requestData.topicId)
-	};
-
-	lib.updateTopics(updateTopicData, onComplete);
-
+router.get('/dashboard',requireLogin, function(req,res){
+	lib.getTopics(req.session.user_id,function(err,topics){
+		var topics = topics.reverse();
+		err && req.render('dashboard',{error:err})
+		!err && res.render('dashboard',{topics:topics});
+	});
 });
+
+router.post('/addtopics', add.addTopics);
+
+router.post('/searchTopics', add.searchTopic);
+
+router.get('/topic/:id',requireLogin, topic.getTopicPage);
+
+router.post('/postComment/:id', requireLogin, topic.postComment);
+
+router.post('/join', topic.joinTopic);
+
+router.post('/leave', topic.leaveTopic);
+
+router.post('/close', topic.closeTopic);
 
 module.exports = router;

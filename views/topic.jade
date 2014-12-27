@@ -3,40 +3,46 @@ block vars
  - var title = "Adda-Topic"
  - var flag = action.action
  - var end = details.end_time
+  a(href="/dashboard") dashboard
 block headcontent
  script(type= "text/javascript" src= "/javascript/load-comment.js")
  script(type= "text/javascript" src= "/javascript/userActions.js")
 block content
  h1 WELCOME TO TOPIC
- h2 TOPIC : #{details.name}
+ b TOPIC : 
+ |#{details.name}
  p 
-  a(href="/dashboard") dashboard
-  |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  a(href="/logout") logout
  div
-  h3
+  p
    span
-    | name: #{adminName} &nbsp;&nbsp;&nbsp;
-    | start-time: #{details.start_time} &nbsp;&nbsp;&nbsp;
+    b name: 
+    |#{adminName} &nbsp;&nbsp;&nbsp;
+    b start-time: 
+    |#{details.start_time} &nbsp;&nbsp;&nbsp;
     if end
-     | close-time : #{details.end_time}
-   h4 description: #{details.description}
+     b close-time : 
+     |#{details.end_time}
+   p 
+   b description: 
+   |#{details.description}
    if flag == null && !end
     span
      h3 click to &nbsp;
       input(type = "submit" id = "join" value = "join" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action}, 'join')")
    if flag == 1 && !details.end_time
     span
-     h3 click to &nbsp;
+     h3 click here &nbsp;
       input(type = "submit" id = "close" value = "close" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action}, 'close')")
    if flag == 2 && !details.end_time
     span
-     h3 click to &nbsp;
+     h3 click here &nbsp;
       input(type = "submit" id = "leave" value = "leave" onclick = "joinTopic(#{action.userId}, #{action.topicId}, #{action.action}, 'leave')")
    if flag == 0 || details.end_time
     h4 closed
   div(class = "commentHolder" id = "commentHolder")
-   input(type = "submit" id = "load" class = "load-button" value = "load complete")
+   span
+    h3 click here &nbsp;
+     input(type = "submit" id = "load" class = "load-button" value = "load complete")
    div(id = "comment" class = "comment")
     //- div(id = "showAllComments" class = "showAllComments")
     each post in posts
