@@ -112,24 +112,6 @@ router.get('/addtopics', requireLogin, function(req,res){
 	res.render('addtopics');
 });
 
-router.post('/addtopics', requireLogin, function(req,res){
-	var userInfo = req.body;
-	userInfo.userId = req.session.user_id; 
-	userInfo.start_time = new Date();
-	
-	var getTopicId = function (err, topicId) {
-		err && res.render('addtopics', {error:error});
-		!err && res.redirect('/topic/' + topicId.id);
-	};
-
-	var callback = function(error){
-		error && res.render('addtopics', {error:error});
-		!error && lib.getTopicId(userInfo.name, getTopicId);	
-	};
-	
-	lib.addTopic(userInfo,callback);
-});
-
 router.get('/topic/:id',requireLogin, function (req, res) {
 	var id = req.params.id;
 	
