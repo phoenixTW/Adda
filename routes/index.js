@@ -162,39 +162,48 @@ router.get('/topic/:id',requireLogin, function (req, res) {
 		error && next();
 		if(posts) {
 			posts.id = id;
-			var callback = function (err, details) {
-				var getUser = function(err, userName) {
-					var getActionDetails = function (actErr, actionDes) {
-						actionDes = actionDes || {
-							userId: req.session.user_id,
-							topicId: id,
-							action: null
-						};
-						var data = {
-							posts: posts,
-							details: details,
-							adminName: userName.name,
-							action: actionDes
-						};
-						res.render('topic', data);
-					};
-
-					var ids = {
-						topicId: id,
-						userId: req.session.user_id
-					};
-
-					lib.getAction(ids, getActionDetails);
-				};
-
-				lib.getUserName(details.userId, getUser);
-			};
-			lib.getTopicDetails(id, callback);
+			getUserName(req, res, posts, id);
 		}
 	};
 
 	lib.getComments(id, onComplete);
 });
+
+var getUserName = function (req, res, posts, id) {
+	var callback = function (err, details) {
+		var getUser = function(err, userName) {
+			getUserActionSummery(req, res, posts, id, details, userName);
+		};
+
+		lib.getUserName(details.userId, getUser);
+	};
+	lib.getTopicDetails(id, callback);
+
+};
+
+var getUserActionSummery = function (req, res, posts, id, details, userName) {
+	var getActionDetails = function (actErr, actionDes) {
+		actionDes = actionDes || {
+			userId: req.session.user_id,
+			topicId: id,
+			action: null
+		};
+		var data = {
+			posts: posts,
+			details: details,
+			adminName: userName.name,
+			action: actionDes
+		};
+		res.render('topic', data);
+	};
+
+	var ids = {
+		topicId: id,
+		userId: req.session.user_id
+	};
+
+	lib.getAction(ids, getActionDetails);
+};
 
 router.post('/postComment/:id', requireLogin, function (req, res) {
 	var post = {
