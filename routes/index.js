@@ -219,46 +219,49 @@ router.post('/postComment/:id', requireLogin, function (req, res) {
 	lib.postComment(post, callback);
 });
 
-router.post('/setAction', function (req, res) {
-	var actionDes = {
-		topicId: req.body['actionDes[topicId]'],
-		userId: req.body['actionDes[userId]'],
-		action: req.body['actionDes[action]']
+router.post('/join', function (req, res) {
+	var requestData = req.body;
+	requestData.action = 2;
+
+	var callback = function (error) {
+		console.log(error);
+		!error && res.redirect('/topic/' + requestData.topicId)
 	};
 
-	if(actionDes.action == null || actionDes.action == '')
-		actionDes.action = 2;
-	else if(actionDes.action == 2){
-		actionDes.action = null;
-	}
-	
-	else if(actionDes.action == 1){
-		actionDes.action = 0;
-		var updateTopicData = {
-			id: actionDes.topicId,
-			endTime: new Date()
-		}
-		lib.updateTopics(updateTopicData, updateTopicCallback);
-	}
+	lib.insertAction(requestData, callback);
+});
 
-	var updateTopicCallback = function (topicErr) {
-		return null;
+router.post('/leave', function (req, res) {
+	var requestData = req.body;
+
+	var callback = function (error) {
+		!error && res.redirect('/topic/' + requestData.topicId)
 	};
+
+	lib.deleteAction(requestData, callback);
+});
+
+router.post('/close', function (req, res) {
+	var requestData = req.body;
+	requestData.action = 0;
+
+	var updateTopicData = {
+		id: requestData.topicId,
+		endTime: new Date()
+	};
+
 
 	var onComplete = function (error) {
-		res.redirect('/topic/' + actionDes.topicId);
+
+		lib.updateAction(requestData, callback);
 	};
 
-
-	var callback = function (err) {
-		console.log(actionDes);
-		if(err)
-			lib.insertAction(actionDes, callback);
-		else
-			res.redirect('/topic/' + actionDes.topicId);
+	var callback = function (error) {
+		!error && res.redirect('/topic/' + requestData.topicId)
 	};
 
-	lib.updateAction(actionDes, callback);	
+	lib.updateTopics(updateTopicData, onComplete);
+
 });
 
 module.exports = router;

@@ -127,7 +127,7 @@ var _insertAction = function(userData,db,onComplete){
 var _updateAction = function(userData,db,onComplete){
 	var query = 'update users set action = ' + 	
 		userData.action + " where userId = " + userData.userId + " and topicId = " + userData.topicId;
-	db.run(query, onComplete); 
+	db.run(query, onComplete);
 };
 
 var _updateTopics = function(info,db,onComplete){
@@ -158,8 +158,13 @@ var _getMyTopics = function(userId, db ,onComplete){
 		else
 			onComplete(err);
 	});
+};
+var _deleteAction = function(userData,db,onComplete){
+	var delQuery = "delete from users where userId = " + 
+		userData.userId+ " and topicId = "+ userData.topicId+";";
 
-}
+	db.run(delQuery, onComplete);
+};
 
 
 var init = function(location){	
@@ -200,7 +205,11 @@ var init = function(location){
 		insertAction:operate(_insertAction),
 		updateAction:operate(_updateAction),
 		updateTopics: operate(_updateTopics),
+<<<<<<< HEAD
 		getMyTopics:operate(_getMyTopics)
+=======
+		deleteAction: operate(_deleteAction)
+>>>>>>> f8d66a022dcf7baa51e1c611f3baa206268668e0
 	};
 	return records;
 };

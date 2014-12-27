@@ -366,4 +366,21 @@ describe('adda_records',function(){
 			});
 		});
 	});
+	describe('#deleteAction',function(){
+		it('delete field where topic id is 3 and userId 1',function(done){
+			var actiondata = {
+				topicId: 3,
+				userId: 1,
+				action: 1
+			};
+
+			adda_records.insertAction(actiondata,function(err,callback){
+				assert.notOk(err);
+				adda_records.deleteAction(actiondata, function (error) {
+					assert.notOk(error);
+					done();
+				});
+			});
+		});
+	});
 });
