@@ -176,7 +176,7 @@ router.get('/topic/:id',requireLogin, function (req, res) {
 							adminName: userName.name,
 							action: actionDes
 						};
-						res.render('topic', {data: data});
+						res.render('topic', data);
 					};
 
 					var ids = {
