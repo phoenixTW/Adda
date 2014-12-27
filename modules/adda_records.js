@@ -127,7 +127,7 @@ var _insertAction = function(userData,db,onComplete){
 var _updateAction = function(userData,db,onComplete){
 	var query = 'update users set action = ' + 	
 		userData.action + " where userId = " + userData.userId + " and topicId = " + userData.topicId;
-	db.run(query, onComplete); 
+	db.run(query, onComplete);
 };
 
 var _updateTopics = function(info,db,onComplete){
@@ -143,6 +143,13 @@ var _getAction = function (ids, db, onComplete) {
 
 	select(db, onComplete, "users", "get", null, whereToGet);
 };
+
+var _deleteAction = function(userData,db,onComplete){
+	var delQuery = "delete from users where userId = " + 
+		userData.userId+ " and topicId = "+ userData.topicId+";";
+
+	db.run(delQuery, onComplete);
+}
 
 
 var init = function(location){	
@@ -182,7 +189,8 @@ var init = function(location){
 		top5ActiveTopics:operate(_top5ActiveTopics),
 		insertAction:operate(_insertAction),
 		updateAction:operate(_updateAction),
-		updateTopics: operate(_updateTopics)
+		updateTopics: operate(_updateTopics),
+		deleteAction: operate(_deleteAction)
 	};
 	return records;
 };
