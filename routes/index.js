@@ -32,7 +32,7 @@ router.use(loadUserFromSession);
 
 router.get('/', function(req, res) {
 	lib.top5ActiveTopics(function(err,topics){
-  		res.render('index',{topics:topics});
+  			res.render('index',{topics:topics.slice(0,5)});
 	})
 });
 
@@ -89,7 +89,6 @@ router.get('/registration',function(req,res){
 
 router.get('/dashboard',requireLogin, function(req,res){
 	lib.getMyTopics(req.session.user_id,function(err,topics){
-		//console.log("&&&&&&&&&&&&&&&",topics)
 		err && req.render('dashboard',{error:err})
 		!err && res.render('dashboard',{topics:topics});
 	})
@@ -224,7 +223,6 @@ router.post('/join', function (req, res) {
 	requestData.action = 2;
 
 	var callback = function (error) {
-		console.log(error);
 		!error && res.redirect('/topic/' + requestData.topicId)
 	};
 

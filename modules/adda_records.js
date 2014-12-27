@@ -64,7 +64,7 @@ var _getSingleUser = function(email_id,db,onComplete){
 	select(db, onComplete, 'registration', 'get', null, whereToGet);
 };
 
-var _startNewTopic = function(startChars,db,onComplete){console.log(startChars);
+var _startNewTopic = function(startChars,db,onComplete){	
 	var searchTopicsQry = "select id,name from topics where name like '%"+startChars+"%'";
 	db.all(searchTopicsQry,onComplete);
 };
@@ -114,8 +114,20 @@ var _getTopicId = function(topics,db,onComplete){
 };
 
 var _top5ActiveTopics = function(db,onComplete){
-	var top5Query = "select distinct id,name,description from topics order by id desc LIMIT 5";
-	db.all(top5Query,onComplete);
+	var top5Query = "select distinct comments.topic_id as id,topics.name,topics.description"+
+	" from topics inner join comments on topics.id=comments.topic_id order by"+
+	" comments.time desc limit 5;";
+	var getCreatedTopics = "select id,name,description from topics";
+	db.all(top5Query,function(err,topics){
+		if(topics.length == 0){
+			db.all(getCreatedTopics,function(er,created){
+				onComplete(null,created)
+			})
+		}
+		else{
+			onComplete(null,topics);
+		}
+	});
 };
 
 var _insertAction = function(userData,db,onComplete){
@@ -205,11 +217,8 @@ var init = function(location){
 		insertAction:operate(_insertAction),
 		updateAction:operate(_updateAction),
 		updateTopics: operate(_updateTopics),
-<<<<<<< HEAD
-		getMyTopics:operate(_getMyTopics)
-=======
+		getMyTopics:operate(_getMyTopics),
 		deleteAction: operate(_deleteAction)
->>>>>>> f8d66a022dcf7baa51e1c611f3baa206268668e0
 	};
 	return records;
 };

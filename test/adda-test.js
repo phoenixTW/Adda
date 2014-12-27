@@ -32,7 +32,7 @@ describe('adda_records',function(){
 	});
 
 	describe('#postComment',function(){
-		it('insert "nice game" by Kaustav Chakraborty into comments table',function(done){
+		it("insert \"nice game\" by Kaustav Chakraborty into comments table",function(done){
 			var post = {
 				comment: 'nice game',
 				userId: 1,
@@ -40,23 +40,22 @@ describe('adda_records',function(){
 				time: '02/03/2014'
 			};
 
-			var expectedComment = [
-				{ 	topic_id: "1",
+			var expectedComment ={ 	
+					topic_id: 1,
 					comment: 'nice game',
-					userId: "1",
+					userId: 1,
 					time: '02/03/2014'
-				}
-			];
+				};
 
 			var retriveComments = function(err, comments) {
 				assert.notOk(err);
-				assert.deepEqual(comments, expectedComment);
+				assert.deepEqual(comments[comments.length-1], expectedComment);
 				done();
 			};
 
 			var callback = function(error){
 				assert.notOk(error);
-				adda_records.getComments('1', retriveComments);
+				adda_records.getComments(1, retriveComments);
 			};
 			adda_records.postComment(post, callback)
 		});
@@ -157,8 +156,7 @@ describe('adda_records',function(){
 
 	describe('#startNewTopic',function(){
 		it('should give all topics started with step',function(done){
-			var expected_topics = [{id:1,name:'step'},{id:2,name:'step of success'}]
-			
+			var expected_topics = [{id:1,name:'step'},{id:2,name:'step of success'}];
 			adda_records.startNewTopic('ste', function(err,topics){
 				assert.notOk(err);
 				assert.deepEqual(expected_topics, topics);
@@ -265,8 +263,8 @@ describe('adda_records',function(){
 	});
 	describe('#top 5 Active Topics',function(){
 		it('should give 5 Active Topics',function(done){
-			var expected_topics = [{id:4,name:"hocky",description:"hocky is our national game"},
-			{id:3,name:"soda",description:"how to make drink"},
+			var expected_topics = [{id:3,name:"soda",description:"how to make drink"},
+			{id:4,name:"hocky",description:"hocky is our national game"},
 			{id:2,name:"step of success",description:"nobel thought"},
 			{id:1,name:"step",description:"software technology excelence program"}];
 			adda_records.top5ActiveTopics(function(err,topic){

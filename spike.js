@@ -57,3 +57,22 @@
 //       console.log('exec error: ' + error);
 //     }
 // });
+
+var arr1 = [
+    { name: "a", age: 24},
+    { name: "b", age: 21},
+    { name: "a", age: 22},
+    { name: "b", age: 24}
+];
+
+var arr2 = [];
+arr2.push(arr1[0]);
+arr1.forEach(function(x){
+	arr2.every(function(y){
+		return x.age != y.age;
+	}) && arr2.push(x);
+});
+
+console.log(arr2);
+
+//a.forEach(function(x){result.every(function(y){return x!=y}) && result.push(x)})

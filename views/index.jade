@@ -1,6 +1,7 @@
 extends layout
 block vars
  - var title = "Adda-Home"
+ - var topis = topics
 block content
  div
   center
@@ -11,12 +12,13 @@ block content
    p Or if new user 
     a(href="/registration") Register
   br
- div
-  hr
+  <hr></hr>
   h1 TOP FIVE MOST TOPICS
-  ol
-   each topic in topics
-    li 
-     h2 #{topic.name}
-     | #{topic.description}
+ if topis
+  div
+   ol
+    each topic in topics
+     li 
+      h2 #{topic.name}
+      | #{topic.description}
   
