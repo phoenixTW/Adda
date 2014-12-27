@@ -1,5 +1,6 @@
 var express = require('express');
 var lib = require('../modules/adda_records').init("data/adda.db");
+var add = require('../modules/addTopics');
 var router = express.Router();
 var bcrypt = require("bcryptjs");
 // var salt = bcrypt.genSaltSync(10);
@@ -72,32 +73,7 @@ router.get('/dashboard',requireLogin, function(req,res){
 	})
 });
 
-router.post('/addtopics',function(req,res){
-	var userInfo = req.body;
-	userId = req.session.user_id;
-	userInfo.userId = userId; 
-	userInfo.start_time = new Date();
-	
-	var getTopicId = function(err,topics){
-		var onComplete = function (actErr) {
-			!actErr && res.redirect('topic/'+topics["max(id)"]);
-		};
-
-		var data = {
-			topicId: topics["max(id)"],
-			userId: userId,
-			action: 1
-		};
-
-		!err && lib.insertAction(data, onComplete);;
-	};
-
-	var callback = function(error){
-		error && res.render('addtopics', {error:error});
-		!error && lib.getTopicId(req.body.name,getTopicId)	
-	}
-	lib.addTopic(userInfo,callback);
-});
+router.post('/addtopics', add.addTopics);
 
 router.post('/startNewTopic', function(req, res) {
 	var data = req.body;
@@ -111,10 +87,6 @@ router.post('/startNewTopic', function(req, res) {
 	else
 		lib.startNewTopic(data.searchText,callback);
 });
-
-
-
-
 
 router.post('/login',function(req,res){
 	var userInfo = req.body;
@@ -172,30 +144,30 @@ router.get('/topic/:id',requireLogin, function (req, res) {
 		error && next();
 		if(posts) {
 			posts.id = id;
-			getUserName(req, res, posts, id);
+			getUserName(req, res, posts);
 		}
 	};
 
 	lib.getComments(id, onComplete);
 });
 
-var getUserName = function (req, res, posts, id) {
+var getUserName = function (req, res, posts) {
 	var callback = function (err, details) {
 		var getUser = function(err, userName) {
-			getUserActionSummery(req, res, posts, id, details, userName);
+			getUserActionSummery(req, res, posts, details, userName);
 		};
 
 		lib.getUserName(details.userId, getUser);
 	};
-	lib.getTopicDetails(id, callback);
+	lib.getTopicDetails(posts.id, callback);
 
 };
 
-var getUserActionSummery = function (req, res, posts, id, details, userName) {
+var getUserActionSummery = function (req, res, posts, details, userName) {
 	var getActionDetails = function (actErr, actionDes) {
 		actionDes = actionDes || {
 			userId: req.session.user_id,
-			topicId: id,
+			topicId: posts.id,
 			action: null
 		};
 		var data = {
@@ -208,7 +180,7 @@ var getUserActionSummery = function (req, res, posts, id, details, userName) {
 	};
 
 	var ids = {
-		topicId: id,
+		topicId: posts.id,
 		userId: req.session.user_id
 	};
 
